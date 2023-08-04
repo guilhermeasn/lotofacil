@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "ts-node combinar5.ts",
-    "start": "ts-node calcular.ts"
+    "start": "ts-node calcular.ts",
+    "start5": "ts-node calcular5.ts",
+    "order": "ts-node ordenar.ts"
   },
   "license": "MIT",
   "dependencies": {
     "@types/node": "^20.4.7",
+    "object-as-array": "^1.8.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   }
