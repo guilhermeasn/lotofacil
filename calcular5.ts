@@ -6,19 +6,23 @@ const combinacoes = combine();
 
 for(let combinacao in combinacoes) {
 
-    const find : number[] = combinacao.split('-').map(n => parseInt(n));
+    if(combinacoes[combinacao as keyof typeof combinacoes] === 0) {
 
-    for(let sorteio in sorteios as Record<string, string[]>) {
+        const find : number[] = combinacao.split('-').map(n => parseInt(n));
 
-        const nums : number[] = sorteios[sorteio as keyof typeof sorteios].map(n => parseInt(n));
+        for(let sorteio in sorteios as Record<string, string[]>) {
 
-        if(find.every(f => nums.some(n => n === f))) {
-            console.log(`o sorteio ${sorteio} contém a combinação ${combinacao}`);
-            combinacoes[combinacao as keyof typeof combinacoes]++;
+            const nums : number[] = sorteios[sorteio as keyof typeof sorteios].map(n => parseInt(n));
+
+            if(find.every(f => nums.some(n => n === f))) {
+                console.log(`o sorteio ${sorteio} contém a combinação ${combinacao}`);
+                combinacoes[combinacao as keyof typeof combinacoes]++;
+            }
+            
         }
-        
-    }
 
-    writeFileSync('combinacoes5.json', JSON.stringify(combinacoes, undefined, 2));
+        writeFileSync('combinacoes5.json', JSON.stringify(combinacoes, undefined, 2));
+
+    }
 
 }
