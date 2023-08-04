@@ -1,0 +1,15 @@
+{
+  "name": "lotofacil",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "ts-node combinar5.ts",
+    "start": "ts-node calcular.ts"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^20.4.7",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  }
+}
