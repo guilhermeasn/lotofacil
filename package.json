@@ -5,13 +5,16 @@
   "scripts": {
     "start": "ts-node calcular.ts",
     "start5": "ts-node calcular5.ts",
-    "order": "ts-node ordenar.ts"
+    "order": "ts-node ordenar.ts",
+    "analise": "ts-node analiseCombinatoria.ts"
   },
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^20.4.7",
     "object-as-array": "^1.8.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.8"
   }
 }
