@@ -22,6 +22,8 @@ function combinatoria(n : number, p : number) : number {
 
 }
 
+// console.log(combinatoria(5, 3)); // 10 jogos
+
 const analises : Record<number, number> = {};
 
 for(let c = 1; c < 25; c++) {
