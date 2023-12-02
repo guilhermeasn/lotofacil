@@ -6,7 +6,8 @@
     "start": "ts-node calcular.ts",
     "start5": "ts-node calcular5.ts",
     "order": "ts-node ordenar.ts",
-    "analise": "ts-node analiseCombinatoria.ts"
+    "analise": "ts-node analiseCombinatoria.ts",
+    "todos": "ts-node gerarTodos.ts"
   },
   "license": "MIT",
   "dependencies": {
