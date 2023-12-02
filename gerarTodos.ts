@@ -1,8 +1,29 @@
 import { writeFile } from 'node:fs/promises';
+import forEach from 'object-as-array/forEach';
+import reduce from 'object-as-array/reduce';
+import resultados from './resultados_1_2968.json';
+
+type Acertos = Record<number, number>;
+
+function analisar(...n : number[]) : Acertos {
+
+    const acertos : Acertos = {};
+
+    for(let c = 5; c <= 15; c++) acertos[c] = 0;
+
+    forEach(resultados, sorteio => {
+        const c = sorteio.reduce((p, c) => n.some(v => v === parseInt(c)) ? p + 1 : p, 0);
+        acertos[c]++;
+    });
+
+    return acertos;
+    
+
+}
 
 async function gerarTodos() {
 
-    await writeFile('todos.json', '{\n');
+    await writeFile('todos.txt', '');
 
     for(let n01 = 1; n01 <= 11; n01++) {
         for(let n02 = n01 + 1; n02 <= 12; n02++) {
@@ -20,9 +41,13 @@ async function gerarTodos() {
                                                         for(let n14 = n13 + 1; n14 <= 24; n14++) {
                                                             for(let n15 = n14 + 1; n15 <= 25; n15++) {
 
-                                                                const jogo = `\t"${n01}-${n02}-${n03}-${n04}-${n05}-${n06}-${n07}-${n08}-${n09}-${n10}-${n11}-${n12}-${n13}-${n14}-${n15}": {},\n`;
-                                                                await writeFile('todos.json', jogo, { flag: 'a+' });
-                                                                console.log(jogo);
+                                                                const jogo = `${n01}-${n02}-${n03}-${n04}-${n05}-${n06}-${n07}-${n08}-${n09}-${n10}-${n11}-${n12}-${n13}-${n14}-${n15}`;
+                                                                const analise = analisar(n01, n02, n03, n04, n05, n06, n07, n08, n09, n10, n11, n12, n13, n14, n15);
+
+                                                                const content = jogo + reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '');
+
+                                                                await writeFile('todos.txt', content + '\n', { flag: 'a+' });
+                                                                console.log(content);
 
                                                             }
                                                         }
@@ -39,8 +64,6 @@ async function gerarTodos() {
             }
         }
     }
-
-    await writeFile('todos.json', '}', { flag: 'a+' });
 
 }
 
