@@ -23,6 +23,9 @@ function analisar(...n : number[]) : Acertos {
 
 async function gerarTodos() {
 
+    let content = '';
+    let acc = 0;
+
     await writeFile('todos.txt', '');
 
     for(let n01 = 1; n01 <= 11; n01++) {
@@ -44,10 +47,16 @@ async function gerarTodos() {
                                                                 const jogo = `${n01}-${n02}-${n03}-${n04}-${n05}-${n06}-${n07}-${n08}-${n09}-${n10}-${n11}-${n12}-${n13}-${n14}-${n15}`;
                                                                 const analise = analisar(n01, n02, n03, n04, n05, n06, n07, n08, n09, n10, n11, n12, n13, n14, n15);
 
-                                                                const content = jogo + reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '');
+                                                                content += jogo + reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '') + '\n';
 
-                                                                await writeFile('todos.txt', content + '\n', { flag: 'a+' });
-                                                                console.log(content);
+                                                                if(++acc >= 999) {
+
+                                                                    await writeFile('todos.txt', content, { flag: 'a+' });
+                                                                    console.log(content);
+                                                                    content = '';
+                                                                    acc = 0;
+
+                                                                }
 
                                                             }
                                                         }
