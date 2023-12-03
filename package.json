@@ -7,7 +7,8 @@
     "start5": "ts-node calcular5.ts",
     "order": "ts-node ordenar.ts",
     "analise": "ts-node analiseCombinatoria.ts",
-    "todos": "ts-node gerarTodos.ts"
+    "todos": "ts-node gerarTodos.ts",
+    "todos20": "ts-node gerar20num.ts"
   },
   "license": "MIT",
   "dependencies": {
