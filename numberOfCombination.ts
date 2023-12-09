@@ -1,6 +1,8 @@
 import { writeFile } from 'fs/promises';
 import forEach from 'object-as-array/forEach';
+import keysMap from 'object-as-array/keysMap';
 import resultados from './resultados_1_2968.json';
+import numeros from './resultados_numbers_1_2968.json';
 
 function numberOfCombination(sequence : number[], overall : number = 25) : number {
 
@@ -46,8 +48,20 @@ async function numeracoesDoResultado() {
 
 }
 
-numeracoesDoResultado().finally(() => console.log('finally'));
+async function diferenca() {
+    const result = keysMap(numeros, (v, k) => v - (numeros?.[(parseInt(k)-1).toString() as keyof typeof numeros] || v));;
+    await writeFile('resultados_numbers_diference_1_2968.json', JSON.stringify(result, undefined, 2));
+}
+
+async function diferencaPos() {
+    const result = keysMap(numeros, (v, k) => v - (numeros?.[(parseInt(k)+1).toString() as keyof typeof numeros] || v));;
+    await writeFile('resultados_numbers_diferencePos_1_2968.json', JSON.stringify(result, undefined, 2));
+}
 
 // console.log(numberOfCombination([11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]));
 
+// numeracoesDoResultado().finally(() => console.log('finally'));
 
+// diferenca().finally(() => console.log('finally'));
+
+// diferencaPos().finally(() => console.log('finally'));
