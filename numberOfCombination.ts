@@ -40,6 +40,33 @@ function numberOfCombination(sequence : number[], overall : number = 25) : numbe
 
 }
 
+function combinationOfNumber(num : number, amount : number = 15, overall : number = 25) : number[] {
+
+    let count : number = 0;
+    let result : number[] = [];
+
+    function combineUtil(start : number = 1, combination : number[] = []) {
+
+        if (combination.length === amount) {
+            if(++count === num) result = combination;
+            return;
+        }
+
+        for (let i = start; i <= overall; i++) {
+            combination.push(i);
+            combineUtil(i + 1, combination);
+            if(result.length > 0) return;
+            combination.pop();
+        }
+
+    }
+
+    combineUtil();
+
+    return result;
+
+}
+
 async function numeracoesDoResultado() {
 
     const result : Record<number, number> = {};
@@ -70,7 +97,7 @@ function mean() {
     return reduce(diff, (p, c) => p + c);
 }
 
-// console.log(numberOfCombination([11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]));
+// console.log(numberOfCombination([16,7,17,13,8,10,9,15,24,21,6,22,4,3,11]));
 
 // numeracoesDoResultado().finally(() => console.log('finally'));
 
@@ -80,4 +107,9 @@ function mean() {
 
 // console.log(repeats());  // result 0
 
-console.log(mean());  // result 167872
+// console.log(mean());  // result 167872
+
+// console.log(combinationOfNumber(2906642));
+
+console.log(combinationOfNumber(2488332+167872));  // [ 2,  4,  8,  9, 10, 12, 14, 15, 17, 19, 20, 21, 23, 24, 25 ]
+console.log(combinationOfNumber(2488332-167872));  // [ 2,  3,  5,  6,  9, 10, 11, 13, 14, 16, 18, 20, 23, 24, 25 ]
