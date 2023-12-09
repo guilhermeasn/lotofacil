@@ -78,6 +78,6 @@ function mean() {
 
 // diferencaPos().finally(() => console.log('finally'));
 
-// console.log(repeats());
+// console.log(repeats());  // result 0
 
-console.log(mean());
+console.log(mean());  // result 167872
