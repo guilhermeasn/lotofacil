@@ -2,6 +2,7 @@ import { writeFile } from 'fs/promises';
 import filter from 'object-as-array/filter';
 import forEach from 'object-as-array/forEach';
 import keysMap from 'object-as-array/keysMap';
+import reduce from 'object-as-array/reduce';
 import some from 'object-as-array/some';
 import resultados from './resultados_1_2968.json';
 import numeros from './resultados_numbers_1_2968.json';
@@ -65,6 +66,10 @@ function repeats() {
     return filter(diff, (v, k) => (some({...diff, [k]: 0}, n => n === v)));
 }
 
+function mean() {
+    return reduce(diff, (p, c) => p + c);
+}
+
 // console.log(numberOfCombination([11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]));
 
 // numeracoesDoResultado().finally(() => console.log('finally'));
@@ -74,3 +79,5 @@ function repeats() {
 // diferencaPos().finally(() => console.log('finally'));
 
 // console.log(repeats());
+
+console.log(mean());
