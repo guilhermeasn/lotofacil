@@ -51,21 +51,30 @@ function analisar(...n : number[]) : Acertos {
 
 }
 
-async function avail() : Promise<void> {
+async function avail(continueOf ?: number, stopIn ?: number) : Promise<void> {
 
     const combinations : number[][] = generateCombinations(15, 25);
 
-    await writeFile('todos.txt', '');
+    if(!continueOf) await writeFile('todos.txt', '');
 
     await forEachAsync(combinations, async (raffle, key) => {
-        const analise = analisar(...(raffle as number[]));
-        await writeFile(
-            'todos.txt',
-            `${parseInt(<string>key) + 1} => ${(raffle as number[]).join('-')}${reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '')}\n`,
-            { flag: 'a+' }
-        )
+
+        const index : number = parseInt(<string>key) + 1;
+
+        if((!continueOf || index > continueOf) && (!stopIn || index <= stopIn)) {
+
+            const analise = analisar(...(raffle as number[]));
+
+            await writeFile(
+                'todos.txt',
+                `${index} => ${(raffle as number[]).join('-')}${reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '')}\n`,
+                { flag: 'a+' }
+            );
+
+        }
+
     });
 
 }
 
-avail();
+avail(780000);
