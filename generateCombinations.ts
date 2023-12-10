@@ -77,4 +77,4 @@ async function avail(continueOf ?: number, stopIn ?: number) : Promise<void> {
 
 }
 
-avail(780000);
+avail(780000, 1000000);
