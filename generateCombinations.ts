@@ -69,7 +69,7 @@ async function avail(file : string, start ?: number, end ?: number) : Promise<vo
 
         const combination : string = combinations[key].join('-');
         const analiseStr : string = reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '');
-        const score : number = Math.round(reduce(analise, (p, v, k) => p + (v * ((k ** 5) / 100000)), 0));
+        const score : number = Math.round(reduce(analise, (p, v, k) => p + (v * (k < 10 ? 0 : (k-10) ** 2)), 0));
 
         await writeFile(
             file,
