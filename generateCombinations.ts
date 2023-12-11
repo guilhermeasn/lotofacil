@@ -60,8 +60,9 @@ async function avail(file : string, start ?: number, end ?: number) : Promise<vo
 
         if((start && start > index) || (end && end < index)) break;
         
+        console.clear();
         console.log('processing combination number ' + index);
-        
+
         const analise = analisar(...combinations[key]);
 
         await writeFile(
