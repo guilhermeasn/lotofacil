@@ -1,6 +1,5 @@
 import { writeFile } from "node:fs/promises";
 import forEach from "object-as-array/forEach";
-import forEachAsync from "object-as-array/forEachAsync";
 import reduce from "object-as-array/reduce";
 import results from './resultados_1_2974.json';
 
@@ -51,30 +50,40 @@ function analisar(...n : number[]) : Acertos {
 
 }
 
-async function avail(continueOf ?: number, stopIn ?: number) : Promise<void> {
+async function avail(file : string, start ?: number, end ?: number) : Promise<void> {
 
     const combinations : number[][] = generateCombinations(15, 25);
 
-    if(!continueOf) await writeFile('todos.txt', '');
-
-    await forEachAsync(combinations, async (raffle, key) => {
+    for(let key in combinations) {
 
         const index : number = parseInt(<string>key) + 1;
 
-        if((!continueOf || index > continueOf) && (!stopIn || index <= stopIn)) {
+        if((start && start > index) || (end && end < index)) break;
+        
+        const analise = analisar(...combinations[key]);
 
-            const analise = analisar(...(raffle as number[]));
+        await writeFile(
+            file,
+            `${index} => ${combinations[key].join('-')}${reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '')}\n`,
+            { flag: 'a+' }
+        );
 
-            await writeFile(
-                'todos.txt',
-                `${index} => ${(raffle as number[]).join('-')}${reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '')}\n`,
-                { flag: 'a+' }
-            );
+    }
 
-        }
-
-    });
+    console.log('finally');
 
 }
 
-avail(780000, 1000000);
+function cmd() {
+
+    const file : string  = process.argv[2];
+    const start : number = parseInt(process.argv[3]);
+    const end : number   = parseInt(process.argv[4]);
+
+    if(!file || isNaN(start) || isNaN(end)) throw new Error('Incorrect parameters');
+
+    avail(file, start, end);
+
+}
+
+cmd();

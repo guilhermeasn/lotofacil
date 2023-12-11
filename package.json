@@ -8,7 +8,8 @@
     "order": "ts-node ordenar.ts",
     "analise": "ts-node analiseCombinatoria.ts",
     "todos": "ts-node gerarTodos.ts",
-    "todos20": "ts-node gerar20num.ts"
+    "todos20": "ts-node gerar20num.ts",
+    "generate": "ts-node generateCombinations.ts"
   },
   "license": "MIT",
   "dependencies": {
