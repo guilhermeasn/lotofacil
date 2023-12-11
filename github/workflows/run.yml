@@ -1,0 +1,125 @@
+name: Run Script
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  part1:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.2
+          cache: 'yarn'
+
+      - name: Install Modules
+        run: yarn
+
+      - name: Run Script
+        run: yarn generate todos.part1.txt 1 817190 
+
+      - name: Commit
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: '.'
+          author_name: Guilherme Neves
+          author_email: guilhermeasn@yahoo.com.br
+          message: 'Continuous Integration'
+
+  part2:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.2
+          cache: 'yarn'
+
+      - name: Install Modules
+        run: yarn
+
+      - name: Run Script
+        run: yarn generate todos.part1.txt 817191 1634380
+
+      - name: Commit
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: '.'
+          author_name: Guilherme Neves
+          author_email: guilhermeasn@yahoo.com.br
+          message: 'Continuous Integration'
+
+  part3:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.2
+          cache: 'yarn'
+
+      - name: Install Modules
+        run: yarn
+
+      - name: Run Script
+        run: yarn generate todos.part1.txt 1634381 2451570
+
+      - name: Commit
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: '.'
+          author_name: Guilherme Neves
+          author_email: guilhermeasn@yahoo.com.br
+          message: 'Continuous Integration'
+
+  part4:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.2
+          cache: 'yarn'
+
+      - name: Install Modules
+        run: yarn
+
+      - name: Run Script
+        run: yarn generate todos.part1.txt 2451571 3268760
+
+      - name: Commit
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: '.'
+          author_name: Guilherme Neves
+          author_email: guilhermeasn@yahoo.com.br
+          message: 'Continuous Integration'
