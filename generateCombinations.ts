@@ -54,6 +54,8 @@ async function avail(file : string, start ?: number, end ?: number) : Promise<vo
 
     const combinations : number[][] = generateCombinations(15, 25);
 
+    await writeFile(file, '');
+
     for(let key in combinations) {
 
         const index : number = parseInt(<string>key) + 1;
