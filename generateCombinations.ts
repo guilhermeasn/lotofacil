@@ -60,10 +60,7 @@ async function avail(file : string, start ?: number, end ?: number) : Promise<vo
 
         if((start && start > index) || (end && end < index)) break;
         
-        if(index.toString().substring(index.toString().length - 3) === '000') {
-            console.clear();
-            console.log('processing combination number ' + index);
-        }
+        if(!(index % 1000)) console.log(index + ' combinations processeds');
 
         const analise = analisar(...combinations[key]);
 
