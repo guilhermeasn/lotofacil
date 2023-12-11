@@ -37,10 +37,8 @@ jobs:
         run: yarn generate ${{ matrix.parts }}
 
       - name: Commit
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: '.'
-          author_name: Guilherme Neves
-          author_email: guilhermeasn@yahoo.com.br
-          message: 'Continuous Integration'
-          push: '--force'
+        run: |
+          git pull
+          git add .
+          git commit -am '${{ matrix.parts }}'
+          git push
