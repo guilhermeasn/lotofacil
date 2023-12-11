@@ -38,7 +38,9 @@ jobs:
 
       - name: Commit
         run: |
+          git config --global user.email "guilhermeasn@yahoo.com.br"
+          git config --global user.name "Guilherme Neves"
           git pull
           git add .
           git commit -am '${{ matrix.parts }}'
-          git push
+          git push --force
