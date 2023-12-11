@@ -56,7 +56,7 @@ jobs:
         run: yarn
 
       - name: Run Script
-        run: yarn generate todos.part1.txt 817191 1634380
+        run: yarn generate todos.part2.txt 817191 1634380
 
       - name: Commit
         uses: EndBug/add-and-commit@v9
@@ -85,7 +85,7 @@ jobs:
         run: yarn
 
       - name: Run Script
-        run: yarn generate todos.part1.txt 1634381 2451570
+        run: yarn generate todos.part3.txt 1634381 2451570
 
       - name: Commit
         uses: EndBug/add-and-commit@v9
@@ -114,7 +114,7 @@ jobs:
         run: yarn
 
       - name: Run Script
-        run: yarn generate todos.part1.txt 2451571 3268760
+        run: yarn generate todos.part4.txt 2451571 3268760
 
       - name: Commit
         uses: EndBug/add-and-commit@v9
