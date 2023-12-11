@@ -58,7 +58,10 @@ async function avail(file : string, start ?: number, end ?: number) : Promise<vo
 
         const index : number = parseInt(<string>key) + 1;
 
-        if((start && start > index) || (end && end < index)) break;
+        if((start && start > index) || (end && end < index)) {
+            console.log('stoped in ' + index);
+            break;
+        }
         
         if(!(index % 1000)) console.log(index + ' combinations processeds');
 
@@ -84,6 +87,7 @@ function cmd() {
 
     if(!file || isNaN(start) || isNaN(end)) throw new Error('Incorrect parameters');
 
+    console.log(file, start, end);
     avail(file, start, end);
 
 }
