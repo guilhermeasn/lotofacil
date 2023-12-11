@@ -63,13 +63,17 @@ async function avail(file : string, start ?: number, end ?: number) : Promise<vo
         if(start && start > index) continue;
         if(end && end < index) break;
         
-        if(!(index % 1000)) console.log(index + ' combinations processeds');
+        if(!(index % 1000)) console.log(index + ' combinations processed');
 
-        const analise = analisar(...combinations[key]);
+        const analise : Acertos = analisar(...combinations[key]);
+
+        const combination : string = combinations[key].join('-');
+        const analiseStr : string = reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '');
+        const score : number = Math.round(reduce(analise, (p, v, k) => p + (v * ((k ** 5) / 100000)), 0));
 
         await writeFile(
             file,
-            `${index} => ${combinations[key].join('-')}${reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '')}\n`,
+            `${index} => ${combination}${analiseStr} | ${score.toString()}pts\n`,
             { flag: 'a+' }
         );
 
