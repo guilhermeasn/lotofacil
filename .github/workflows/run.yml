@@ -13,10 +13,14 @@ jobs:
     strategy:
       matrix:
         parts: [
-          todos.part1.txt 1 817190,
-          todos.part2.txt 817191 1634380,
-          todos.part3.txt 1634381 2451570,
-          todos.part4.txt 2451571 3268760
+          todos.part1.txt 1 408595,
+          todos.part2.txt 408596 817190,
+          todos.part3.txt 817191 1225785,
+          todos.part4.txt 1225786 1634380,
+          todos.part5.txt 1634381 2042975,
+          todos.part6.txt 2042976 2451570,
+          todos.part7.txt 2451571 2860165,
+          todos.part8.txt 2860166 3268760,
         ]
 
     steps:
