@@ -1,7 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import forEach from "object-as-array/forEach";
 import reduce from "object-as-array/reduce";
-import results from './resultados_1_2974.json';
+import results from './resultados_1_2977.json';
 
 function generateCombinations(amount : number, overall : number = 25) : number[][] {
     

@@ -1,0 +1,53 @@
+name: Run Script
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  generate:
+  
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        parts: [
+          todos.part1.txt 1 297160,
+          todos.part2.txt 297161 594320,
+          todos.part3.txt 594321 891480,
+          todos.part4.txt 891481 1188640,
+          todos.part5.txt 1188641 1485800,
+          todos.part6.txt 1485801 1782960,
+          todos.part7.txt 1782961 2080120,
+          todos.part8.txt 2080121 2377280,
+          todos.part9.txt 2377281 2674440,
+          todos.part10.txt 2674441 2971600,
+          todos.part11.txt 2971601 3268760,
+        ]
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.2
+          cache: 'yarn'
+
+      - name: Install Modules
+        run: yarn
+
+      - name: Run Script
+        run: yarn generate ${{ matrix.parts }}
+
+      - name: Commit
+        run: |
+          git config --global user.email "guilhermeasn@yahoo.com.br"
+          git config --global user.name "Guilherme Neves"
+          git pull
+          git add .
+          git commit -am '${{ matrix.parts }}'
+          git push --force
