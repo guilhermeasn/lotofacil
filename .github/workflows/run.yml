@@ -30,6 +30,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          lfs: true
 
       - name: Node.js
         uses: actions/setup-node@v3
@@ -47,6 +49,8 @@ jobs:
         run: |
           git config --global user.email "guilhermeasn@yahoo.com.br"
           git config --global user.name "Guilherme Neves"
+          git lfs install
+          git lfs track "*.txt"
           git pull
           git add .
           git commit -am '${{ matrix.parts }}'
