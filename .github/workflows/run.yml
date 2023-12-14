@@ -2,7 +2,7 @@ name: Run Script
 
 on:
   push:
-    branches: [ master ]
+    branches: [ old ]
 
 jobs:
 

@@ -1,7 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import forEach from "object-as-array/forEach";
 import reduce from "object-as-array/reduce";
-import results from './resultados_1_2974.json';
+import results from './resultados_1_2978.json';
 
 function generateCombinations(amount : number, overall : number = 25) : number[][] {
     
@@ -38,11 +38,11 @@ function analisar(...n : number[]) : Acertos {
 
     const acertos : Acertos = {};
 
-    for(let c = 5; c <= 15; c++) acertos[c] = 0;
+    for(let c = 11; c <= 15; c++) acertos[c] = 0;
 
     forEach(results, sorteio => {
         const c = sorteio.reduce((p, c) => n.some(v => v === parseInt(c)) ? p + 1 : p, 0);
-        acertos[c]++;
+        if(c > 10) acertos[c]++;
     });
 
     return acertos;
@@ -68,12 +68,12 @@ async function avail(file : string, start ?: number, end ?: number) : Promise<vo
         const analise : Acertos = analisar(...combinations[key]);
 
         const combination : string = combinations[key].join('-');
-        const analiseStr : string = reduce(analise, (p, v, k) => `${p} | ${k}:${v}`, '');
+        const analiseStr : string = reduce(analise, (p, v, k) => `${p} ${k}:${v}`, '');
         const score : number = Math.round(reduce(analise, (p, v, k) => p + (v * (k < 10 ? 0 : (k-10) ** 2)), 0));
 
         await writeFile(
             file,
-            `${index} => ${combination}${analiseStr} | ${score.toString()}pts\n`,
+            `${index} | ${combination}${analiseStr} | ${score.toString()}\n`,
             { flag: 'a+' }
         );
 
