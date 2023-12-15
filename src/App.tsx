@@ -1,17 +1,15 @@
-import { Container, Navbar } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import BetInput from "./components/BetInput";
+import Header from "./components/Header";
 
 export default function App() {
 
     return <>
 
-        <Navbar as='header' bg="primary" data-bs-theme="dark">
-            <Container>
-                <Navbar.Brand href="#home">Lotofácil</Navbar.Brand>
-            </Container>
-        </Navbar>
+       <Header />
 
-        <Container as='main'>
-            
+        <Container as='main' className="py-3">
+            <BetInput />
         </Container>
 
     </>;

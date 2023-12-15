@@ -4,3 +4,9 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+.input-error {
+    background-color: #f8d7da !important;
+    border-color: #f1aeb5 !important;
+    color: #58151c !important;
+}
