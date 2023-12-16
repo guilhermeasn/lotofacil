@@ -4,6 +4,7 @@ import BetInput from "./components/BetInput";
 import BetQuantity from "./components/BetQuantity";
 import Header from "./components/Header";
 import Totalization from "./components/Totalization";
+import { raffles } from "./helpers/fetch";
 
 /**
  * ### Dados da Aposta
@@ -25,6 +26,8 @@ const betEmpty : Bet = {
 }
 
 const price : number = 3;
+
+raffles().then(console.dir);
 
 export default function App() {
 
