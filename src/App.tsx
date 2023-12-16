@@ -26,9 +26,9 @@ export default function App() {
         setBets(newBets);
     }
 
-    const betUpdate = (index : number, changes : Partial<Bet>) => {
+    const betUpdate = (index : number, bet : Bet) => {
         const newBets : Bet[] = [ ...bets ];
-        newBets[index] = { ...newBets[index], ...changes };
+        newBets[index] = bet;
         setBets(newBets);
     }
 
@@ -48,7 +48,7 @@ export default function App() {
                     key={ index }
                     price={ 3 }
                     bet={ bet }
-                    onChange={ changes => betUpdate(index, changes) }
+                    onChange={ bet => betUpdate(index, bet) }
                 />
             )) }
 
