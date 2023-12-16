@@ -14,7 +14,12 @@ export function combinatorics(amount : number, overall : number) : number {
 
 }
 
-export function bets(quantity : number) : number {
-    if(quantity < 15) throw new Error('A quantidade mínima de números para uma aposta são 15!');
-    return quantity > 15 ? combinatorics(15, quantity) : 1;
+export function betQuantity(balls : number) : number {
+    return balls > 15 ? combinatorics(15, balls) : balls === 15 ? 1 : 0;
+}
+
+export const totalBets : number = combinatorics(15, 25);
+
+export function probability(quantity : number) : number {
+    return quantity > 0 ? Math.round(totalBets / quantity) : 0;
 }
