@@ -10,3 +10,9 @@ body {
     border-color: #f1aeb5 !important;
     color: #58151c !important;
 }
+
+.input-success {
+    background-color: #d7f8da !important;
+    border-color: #aef1b5 !important;
+    color: #15581c !important;
+}
