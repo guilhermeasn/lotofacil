@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Container } from "react-bootstrap";
+
 import BetInput from "./components/BetInput";
 import BetQuantity from "./components/BetQuantity";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
+import Proofing from "./components/Proofing";
 import Totalization from "./components/Totalization";
-import { raffles } from "./helpers/fetch";
 
 /**
  * ### Dados da Aposta
@@ -27,8 +29,6 @@ const betEmpty : Bet = {
 
 const price : number = 3;
 
-raffles().then(console.dir);
-
 export default function App() {
 
     const [ bets, setBets ] = useState<Bet[]>([ betEmpty ]);
@@ -45,7 +45,7 @@ export default function App() {
         setBets(newBets);
     }
 
-    const betTotal : number = bets.reduce((p, c) => p + c.quantity, 0);
+    const betTotal : number = bets.reduce((p, c) => p + (c.valid ? c.quantity : 0), 0);
 
     return <>
 
@@ -69,8 +69,11 @@ export default function App() {
             )) }
 
             <Totalization price={ price } quantity={ betTotal } />
+            <Proofing bets={ bets } />
 
         </Container>
+
+        <Footer />
 
     </>;
 

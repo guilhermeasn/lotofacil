@@ -1,6 +1,6 @@
 import map from "object-as-array/map";
-import { probability, probabilityLevel } from "../helpers/math";
 import { Card, Col, Row } from "react-bootstrap";
+import { probability, probabilityLevel } from "../helpers/math";
 
 export type TotalizationProps = {
     quantity : number;
@@ -22,12 +22,12 @@ export default function Totalization({ quantity, price } : TotalizationProps) {
     const data : Record<string, string[]> = {
         'Quantidade': [ quantity.toLocaleString('pt-br'), quantity === 1 ? 'jogo' : 'jogos' ],
         'Valor total': [ (quantity * price).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) ],
-        'Probabilidade': [ '1 em', prob.toLocaleString(), prob > 0 ? '(' + description[probabilityLevel(prob)-1] + ')' : '' ]
+        'Probabilidade': [ prob > 0 ? '1 em' : '', prob.toLocaleString(), prob > 0 ? '(' + description[probabilityLevel(prob)-1] + ')' : '' ]
     };
 
     return (
 
-        <Row className="border-top">
+        <Row className="border-top border-bottom my-4">
 
             { map(data, (value, title) => (
 

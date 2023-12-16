@@ -34,3 +34,7 @@ export function probabilityLevel(probability : number) : 1|2|3|4|5 {
            probability <= totalBets / 10 ? 4 : 5;
 
 }
+
+export function match(bet : number[], raffle : number[]) : number {
+    return bet.reduce((sum, num1) => raffle.some(num2 => num1 === num2) ? sum + 1 : sum ,0);
+}

@@ -1,3 +1,16 @@
+import { Container } from "react-bootstrap";
+
 export default function Footer() {
-    return <></>
+
+    return (
+
+        <footer>
+            <hr className="mb-0" />
+            <Container>
+                gn.dev.br
+            </Container>
+        </footer>
+
+    );
+
 }
