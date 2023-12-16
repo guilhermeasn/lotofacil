@@ -13,12 +13,7 @@ export type ProofingProps = {
 export default function Proofing({ bets } : ProofingProps) {
 
     const [ data, setData ] = useState<Raffles>(null);
-
-    useEffect(() => {
-        if(!data && bets.some(bet => bet.valid)) {
-            raffles().then(setData);
-        }
-    }, [ bets, data ]);
+    useEffect(() => { if(!data) raffles().then(setData); }, [ data ]);
 
     return !data ? <Loading /> : (
 
