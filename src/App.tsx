@@ -6,12 +6,14 @@ import Header from "./components/Header";
 
 export type Bet = {
     value : string;
+    balls : number;
     price : number;
     valid : boolean;
 }
 
 const betDefault : Bet = {
     value: '',
+    balls: 15,
     price: 0,
     valid: false
 }
@@ -23,6 +25,12 @@ export default function App() {
     const betQuantity = (value : number) => {
         const newBets : Bet[] = [];
         for(let c = 0; c < value; c++) newBets.push(bets?.[c] ?? betDefault);
+        setBets(newBets);
+    }
+
+    const betUpdate = (index : number, changes : Partial<Bet>) => {
+        const newBets : Bet[] = [ ...bets ];
+        newBets[index] = { ...newBets[index], ...changes };
         setBets(newBets);
     }
 
@@ -40,6 +48,9 @@ export default function App() {
             { bets.map((bet, index) => (
                 <BetInput
                     key={ index }
+                    price={ 3 }
+                    bet={ bet }
+                    onChange={ changes => betUpdate(index, changes) }
                 />
             )) }
 
