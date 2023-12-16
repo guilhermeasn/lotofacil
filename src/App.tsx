@@ -18,7 +18,7 @@ export type Bet = {
     valid : boolean;
 }
 
-const betDefault : Bet = {
+const betEmpty : Bet = {
     balls: [],
     quantity : 0,
     valid: false
@@ -28,11 +28,11 @@ const price : number = 3;
 
 export default function App() {
 
-    const [ bets, setBets ] = useState<Bet[]>([ betDefault ]);
+    const [ bets, setBets ] = useState<Bet[]>([ betEmpty ]);
 
     const betQuantity = (value : number) : void => {
         const newBets : Bet[] = [];
-        for(let c = 0; c < value; c++) newBets.push(bets?.[c] ?? betDefault);
+        for(let c = 0; c < value; c++) newBets.push(bets?.[c] ?? betEmpty);
         setBets(newBets);
     }
 
@@ -42,7 +42,7 @@ export default function App() {
         setBets(newBets);
     }
 
-    const betTotal : number = bets.reduce((p, c) => p + c.quantity ,0);
+    const betTotal : number = bets.reduce((p, c) => p + c.quantity, 0);
 
     return <>
 
