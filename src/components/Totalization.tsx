@@ -22,7 +22,7 @@ export default function Totalization({ quantity, price } : TotalizationProps) {
     const data : Record<string, string[]> = {
         'Quantidade': [ quantity.toLocaleString('pt-br'), quantity === 1 ? 'jogo' : 'jogos' ],
         'Valor total': [ (quantity * price).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) ],
-        'Probabilidade': [ prob.toLocaleString(), prob > 0 ? description[probabilityLevel(prob-1)] : '' ]
+        'Probabilidade': [ '1 em', prob.toLocaleString(), prob > 0 ? '(' + description[probabilityLevel(prob)-1] + ')' : '' ]
     };
 
     return (
