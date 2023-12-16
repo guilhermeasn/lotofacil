@@ -6,14 +6,12 @@ import Header from "./components/Header";
 
 export type Bet = {
     value : string;
-    balls : number;
     price : number;
     valid : boolean;
 }
 
 const betDefault : Bet = {
     value: '',
-    balls: 15,
     price: 0,
     valid: false
 }
