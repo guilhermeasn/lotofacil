@@ -1,7 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useMask } from "mask-hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Form, InputGroup } from "react-bootstrap";
 import { Bet } from "../App";
 import { bets } from "../helpers/math";
@@ -12,36 +10,36 @@ export type BetInputProps = {
     onChange : (changes : Partial<Bet>) => void;
 }
 
+const maskDefaut : string = Array.from({ length: 20 }, () => '[1-25]').join('-');
+
 export default function BetInput({ bet, price, onChange } : BetInputProps) {
 
-    const mask = useMask({ masks: [ Array.from({ length: 20 }, () => '[1-25]').join('-') ] });
+    const mask = useMask({ masks: [ maskDefaut ] });
+    const [ value, setValue ] = useState<string>(bet.balls.join('-'));
 
     useEffect(() => {
 
-        const pieces : number[] = bet.value.split('-').map(v => parseInt(v));
+        const balls : number[] = value.split('-').filter(v => v.length === 2).map(v => parseInt(v));
+        const valid : boolean = balls.length >= 15 && !balls.some(v => v < 1 || v > 25) && (new Set(balls)).size === balls.length;
+        onChange({ valid, balls, price : valid ? bets(balls.length) * price : 0 });
 
-        const valid : boolean = (
-            bet.value.length === bet.balls * 3 - 1 &&
-            pieces.length === bet.balls &&
-            !pieces.some(p => p < 1 || p > 25) &&
-            (new Set(pieces)).size === pieces.length
-        );
-
-        onChange({ valid, price : valid ? bets(bet.balls) * price : 0 });
-
-    }, [ bet.value, bet.balls ]);
+    }, [ value ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
 
         <InputGroup className="mb-3">
 
             <Form.Control
-                value={ bet.value }
-                className={ bet.value ? bet.valid ? 'input-success' : 'input-error' : undefined }
-                onChange={ input => onChange({ value: mask(input.currentTarget.value) }) }
+                value={ value }
+                className={ value ? bet.valid ? 'input-success' : 'input-error' : undefined }
+                onChange={ input => setValue(mask(input.currentTarget.value)) }
             />
 
-            <InputGroup.Text>
+            <InputGroup.Text className="d-none d-sm-block">
+                { bet.balls.length } números
+            </InputGroup.Text>
+
+            <InputGroup.Text className="d-none d-md-block">
                 { bet.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) }
             </InputGroup.Text>
 

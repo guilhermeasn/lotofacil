@@ -5,13 +5,13 @@ import BetQuantity from "./components/BetQuantity";
 import Header from "./components/Header";
 
 export type Bet = {
-    value : string;
+    balls : number[];
     price : number;
     valid : boolean;
 }
 
 const betDefault : Bet = {
-    value: '',
+    balls: [],
     price: 0,
     valid: false
 }
