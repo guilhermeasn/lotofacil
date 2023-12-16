@@ -23,3 +23,14 @@ export const totalBets : number = combinatorics(15, 25);
 export function probability(quantity : number) : number {
     return quantity > 0 ? Math.round(totalBets / quantity) : 0;
 }
+
+export function probabilityLevel(probability : number) : 1|2|3|4|5 {
+
+    if(probability < 1) return 5;
+
+    return probability <= totalBets / 10000 ? 1 :
+           probability <= totalBets / 1000 ? 2 :
+           probability <= totalBets / 100 ? 3 :
+           probability <= totalBets / 10 ? 4 : 5;
+
+}

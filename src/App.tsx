@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 import BetInput from "./components/BetInput";
 import BetQuantity from "./components/BetQuantity";
 import Header from "./components/Header";
-import { probability } from "./helpers/math";
+import Totalization from "./components/Totalization";
 
 /**
  * ### Dados da Aposta
@@ -65,10 +65,7 @@ export default function App() {
                 />
             )) }
 
-            <hr />
-
-            <p>Valor total { (betTotal * price).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) }</p>
-            <p>Probabilidade { probability(betTotal).toLocaleString() }</p>
+            <Totalization price={ price } quantity={ betTotal } />
 
         </Container>
 
