@@ -4,7 +4,7 @@ export default function Header() {
     return (
         <Navbar as='header' bg="primary" data-bs-theme="dark">
             <Container>
-                <Navbar.Brand href="#home">Lotofácil</Navbar.Brand>
+                <Navbar.Brand>Lotofácil</Navbar.Brand>
             </Container>
         </Navbar>
     )
