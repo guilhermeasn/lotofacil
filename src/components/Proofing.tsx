@@ -1,6 +1,6 @@
 import map from "object-as-array/map";
-import { useEffect, useState } from "react";
-import { Table } from "react-bootstrap";
+import { ReactNode, useEffect, useState } from "react";
+import { OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import { Bet } from "../App";
 import { Raffles, raffles } from "../helpers/fetch";
 import { match } from "../helpers/math";
@@ -31,22 +31,33 @@ export default function Proofing({ bets, onChange } : ProofingProps) {
         <Table variant="warning" responsive striped bordered hover>
 
             <thead>
+
                 <tr>
+
                     <th>Sorteios&nbsp;=&gt;</th>
+
                     { map(data, (raffle, index) => (
-                        <th key={ index } title={ raffle.sort((a, b) => a - b).join('-') }>
+
+                        <ThBet key={ index } balls={ raffle }>
                             { index }
-                        </th>
+                        </ThBet>
+
                     )) }
+
                 </tr>
+
             </thead>
 
             <tbody>
+
                 { bets.map((bet, key) => (
+
                     <tr key={ key }>
-                        <th title={ bet.balls.sort((a, b) => a - b).join('-') }>
+
+                        <ThBet balls={ bet.balls }>
                             Aposta&nbsp;{ key + 1 }
-                        </th>
+                        </ThBet>
+
                         { bet.valid ? bet.hits?.map((hit, key) => (
                             <td key={ key }>
                                 { hit }
@@ -56,12 +67,31 @@ export default function Proofing({ bets, onChange } : ProofingProps) {
                                 Aposta inválida! Verifique!
                             </td>
                         ) }
+
                     </tr>
+
                 )) }
+
             </tbody>
 
         </Table>
 
+    );
+
+}
+
+type ThBetProps = {
+    balls      : number[];
+    children   : ReactNode;
+    className ?: string;
+}
+
+function ThBet({ balls, children, className } : ThBetProps) {
+
+    return (
+        <OverlayTrigger overlay={ <Tooltip>{ balls.sort((a, b) => a - b).join('-') }</Tooltip> }>
+            <th className={ className }>{ children }</th>
+        </OverlayTrigger>
     );
 
 }

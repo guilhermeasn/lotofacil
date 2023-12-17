@@ -48,7 +48,6 @@ export default function App() {
     }
 
     const betTotal : number = bets.reduce((p, c) => p + (c.valid ? c.quantity : 0), 0);
-    console.log(bets);
 
     return <>
 
