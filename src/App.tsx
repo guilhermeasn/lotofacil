@@ -48,6 +48,7 @@ export default function App() {
     }
 
     const betTotal : number = bets.reduce((p, c) => p + (c.valid ? c.quantity : 0), 0);
+    console.log(bets);
 
     return <>
 
@@ -55,30 +56,42 @@ export default function App() {
 
         <Container as='main' className="py-3">
 
-            <BetQuantity
-                quantity={ bets.length }
-                onChange={ betQuantity }
-            />
-            
-            { bets.map((bet, index) => (
-                <BetInput
-                    index={ index }
-                    key={ index }
-                    price={ price }
-                    bet={ bet }
+            <section>
+
+                <BetQuantity
+                    quantity={ bets.length }
+                    onChange={ betQuantity }
+                />
+                
+                { bets.map((bet, index) => (
+                    <BetInput
+                        index={ index }
+                        key={ index }
+                        price={ price }
+                        bet={ bet }
+                        onChange={ betUpdate }
+                    />
+                )) }
+
+            </section>
+
+            <section className="my-4 py-4 border-top border-bottom">
+
+                <Proofing
+                    bets={ bets }
                     onChange={ betUpdate }
                 />
-            )) }
+
+            </section>
+
+            <section>
 
             <Totalization
                 price={ price }
                 quantity={ betTotal }
             />
 
-            <Proofing
-                bets={ bets }
-                onChange={ betUpdate }
-            />
+            </section>
 
         </Container>
 

@@ -27,7 +27,7 @@ export default function Totalization({ quantity, price } : TotalizationProps) {
 
     return (
 
-        <Row className="border-top border-bottom my-4">
+        <Row>
 
             { map(data, (value, title) => (
 

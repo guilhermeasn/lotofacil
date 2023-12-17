@@ -8,7 +8,7 @@ export type BetInputProps = {
     index : number;
     bet : Bet;
     price : number;
-    onChange : (index : number, changes : Partial<Bet>) => void;
+    onChange : (index : number, bet : Bet) => void;
 }
 
 const maskDefaut : string = Array.from({ length: 20 }, () => '[1-25]').join('-');
@@ -22,7 +22,7 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
 
         const balls : number[] = value.split('-').filter(v => v.length === 2).map(v => parseInt(v));
         const valid : boolean = value.replace(/-$/, '').length === balls.length * 3 - 1 && balls.length >= 15 && !balls.some(v => v < 1 || v > 25) && (new Set(balls)).size === balls.length;
-        onChange(index, { valid, balls, quantity: betQuantity(balls.length) });
+        onChange(index, { valid, balls, hits: [], quantity: betQuantity(balls.length) });
 
     }, [ value ]); // eslint-disable-line react-hooks/exhaustive-deps
 
