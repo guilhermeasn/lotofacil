@@ -1,10 +1,12 @@
 import map from "object-as-array/map";
 import { Card, Col, Row } from "react-bootstrap";
+import { Matrix } from "../App";
 import { probability, probabilityLevel } from "../helpers/math";
 
 export type TotalizationProps = {
     quantity : number;
-    price : number;
+    price    : number;
+    matrix  ?: Matrix;
 }
 
 const description : string[] = [
@@ -15,7 +17,7 @@ const description : string[] = [
     'Muito Baixo'
 ];
 
-export default function Totalization({ quantity, price } : TotalizationProps) {
+export default function Totalization({ quantity, price, matrix } : TotalizationProps) {
 
     const prob : number = probability(quantity);
 

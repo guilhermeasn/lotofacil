@@ -21,6 +21,8 @@ export type Bet = {
     valid : boolean;
 }
 
+export type Matrix = number[][];
+
 const betEmpty : Bet = {
     balls: [],
     quantity : 0,
@@ -32,6 +34,7 @@ const price : number = 3;
 export default function App() {
 
     const [ bets, setBets ] = useState<Bet[]>([ betEmpty ]);
+    const [ matrix, setMatrix ] = useState<Matrix>();
 
     const betQuantity = (value : number) : void => {
         const newBets : Bet[] = [];
@@ -60,16 +63,24 @@ export default function App() {
             
             { bets.map((bet, index) => (
                 <BetInput
-                    id={ index + 1 }
+                    id={ index }
                     key={ index }
                     price={ price }
                     bet={ bet }
-                    onChange={ bet => betUpdate(index, bet) }
+                    onChange={ betUpdate }
                 />
             )) }
 
-            <Totalization price={ price } quantity={ betTotal } />
-            <Proofing bets={ bets } />
+            <Totalization
+                price={ price }
+                quantity={ betTotal }
+                matrix={ matrix }
+            />
+
+            <Proofing
+                bets={ bets }
+                onLoad={ setMatrix }
+            />
 
         </Container>
 

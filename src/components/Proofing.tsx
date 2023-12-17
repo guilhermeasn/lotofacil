@@ -1,13 +1,14 @@
 import map from "object-as-array/map";
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
-import { Bet } from "../App";
+import { Bet, Matrix } from "../App";
 import { Raffles, raffles } from "../helpers/fetch";
 import { match } from "../helpers/math";
 import Loading from "./Loading";
 
 export type ProofingProps = {
-    bets : Bet[]
+    bets : Bet[];
+    onLoad : (matrix : Matrix) => void;
 };
 
 export default function Proofing({ bets } : ProofingProps) {
