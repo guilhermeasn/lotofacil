@@ -16,17 +16,17 @@ import Totalization from "./components/Totalization";
  * - **valid**: aposta valida
  */
 export type Bet = {
-    balls : number[];
+    balls    : number[];
     quantity : number;
-    valid : boolean;
+    valid    : boolean;
+    hits     : number[]
 }
 
-export type Matrix = number[][];
-
 const betEmpty : Bet = {
-    balls: [],
-    quantity : 0,
-    valid: false
+    balls:    [],
+    quantity: 0,
+    valid:    false,
+    hits:     []
 }
 
 const price : number = 3;
@@ -34,7 +34,6 @@ const price : number = 3;
 export default function App() {
 
     const [ bets, setBets ] = useState<Bet[]>([ betEmpty ]);
-    const [ matrix, setMatrix ] = useState<Matrix>();
 
     const betQuantity = (value : number) : void => {
         const newBets : Bet[] = [];
@@ -42,9 +41,9 @@ export default function App() {
         setBets(newBets);
     }
 
-    const betUpdate = (index : number, bet : Bet) : void => {
+    const betUpdate = (index : number, changes : Partial<Bet>) : void => {
         const newBets : Bet[] = [ ...bets ];
-        newBets[index] = bet;
+        newBets[index] = { ...newBets[index], ...changes };
         setBets(newBets);
     }
 
@@ -63,7 +62,7 @@ export default function App() {
             
             { bets.map((bet, index) => (
                 <BetInput
-                    id={ index }
+                    index={ index }
                     key={ index }
                     price={ price }
                     bet={ bet }
@@ -74,12 +73,11 @@ export default function App() {
             <Totalization
                 price={ price }
                 quantity={ betTotal }
-                matrix={ matrix }
             />
 
             <Proofing
                 bets={ bets }
-                onLoad={ setMatrix }
+                onChange={ betUpdate }
             />
 
         </Container>

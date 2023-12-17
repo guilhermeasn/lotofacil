@@ -1,20 +1,33 @@
 import map from "object-as-array/map";
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
-import { Bet, Matrix } from "../App";
+import { Bet } from "../App";
 import { Raffles, raffles } from "../helpers/fetch";
-import { match } from "../helpers/math";
 import Loading from "./Loading";
 
 export type ProofingProps = {
     bets : Bet[];
-    onLoad : (matrix : Matrix) => void;
+    onChange : (index : number, changes : Partial<Bet>) => void;
 };
 
-export default function Proofing({ bets } : ProofingProps) {
+export default function Proofing({ bets, onChange } : ProofingProps) {
 
     const [ data, setData ] = useState<Raffles>(null);
-    useEffect(() => { if(!data) raffles().then(setData); }, [ data ]);
+    useEffect(() => { data || raffles().then(setData); }, [ data ]);
+
+    // useEffect(() => {
+
+    //     let matrix : Matrix | undefined;
+    //     let valids : number[][] = bets.filter(bet => bet.valid).map(bet => bet.balls);
+
+    //     if(data && valids.length) {
+    //         matrix = Array(valids.length);
+    //         valids.forEach(bet => matrix?.push(map(data, (raffle) => match(bet, raffle))));
+    //     }
+
+    //     onLoad(matrix);
+
+    // }, [ data, bets ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return !data ? <Loading /> : (
 
@@ -37,7 +50,9 @@ export default function Proofing({ bets } : ProofingProps) {
                         <th title={ bet.balls.sort((a, b) => a - b).join('-') }>
                             Aposta&nbsp;{ key + 1 }
                         </th>
-                        { bet.valid ? <Column balls={ bet.balls } raffles={ data } /> : (
+                        { bet.valid ? (
+                            <></>
+                        ) : (
                             <td className="ps-3 text-danger" colSpan={ Object.keys(data).length - 1 }>
                                 Aposta inválida! Verifique!
                             </td>
@@ -48,25 +63,6 @@ export default function Proofing({ bets } : ProofingProps) {
 
         </Table>
 
-    );
-
-}
-
-type ColumnProps = {
-    balls : number[];
-    raffles : NonNullable<Raffles>;
-}
-
-function Column({ balls, raffles } : ColumnProps) {
-
-    return (
-        <>
-            { map(raffles, (raffle, index) => (
-                <td key={ index }>
-                    { match(balls, raffle) }
-                </td>
-            )) }
-        </>
     );
 
 }

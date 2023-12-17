@@ -5,15 +5,15 @@ import { Bet } from "../App";
 import { betQuantity } from "../helpers/math";
 
 export type BetInputProps = {
-    id : number;
+    index : number;
     bet : Bet;
     price : number;
-    onChange : (id : number, bet : Bet) => void;
+    onChange : (index : number, changes : Partial<Bet>) => void;
 }
 
 const maskDefaut : string = Array.from({ length: 20 }, () => '[1-25]').join('-');
 
-export default function BetInput({ id, bet, price, onChange } : BetInputProps) {
+export default function BetInput({ index, bet, price, onChange } : BetInputProps) {
 
     const mask = useMask({ masks: [ maskDefaut ] });
     const [ value, setValue ] = useState<string>(bet.balls.join('-'));
@@ -22,7 +22,7 @@ export default function BetInput({ id, bet, price, onChange } : BetInputProps) {
 
         const balls : number[] = value.split('-').filter(v => v.length === 2).map(v => parseInt(v));
         const valid : boolean = value.replace(/-$/, '').length === balls.length * 3 - 1 && balls.length >= 15 && !balls.some(v => v < 1 || v > 25) && (new Set(balls)).size === balls.length;
-        onChange(id, { valid, balls, quantity: betQuantity(balls.length) });
+        onChange(index, { valid, balls, quantity: betQuantity(balls.length) });
 
     }, [ value ]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -31,7 +31,7 @@ export default function BetInput({ id, bet, price, onChange } : BetInputProps) {
         <InputGroup className="mb-3">
 
             <InputGroup.Text className="d-none d-md-block bg-dark text-light">
-                { id + 1 }
+                { index + 1 }
             </InputGroup.Text>
 
             <Form.Control
