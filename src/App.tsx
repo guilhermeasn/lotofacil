@@ -19,14 +19,12 @@ export type Bet = {
     balls    : number[];
     quantity : number;
     valid    : boolean;
-    hits     : number[]
 }
 
 const betEmpty : Bet = {
     balls:    [],
     quantity: 0,
-    valid:    false,
-    hits:     []
+    valid:    false
 }
 
 const price : number = 3;

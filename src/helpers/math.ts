@@ -38,3 +38,16 @@ export function probabilityLevel(probability : number) : 1|2|3|4|5 {
 export function match(bet : number[], raffle : number[]) : number {
     return bet.reduce((sum, num1) => raffle.some(num2 => num1 === num2) ? sum + 1 : sum ,0);
 }
+
+export function matches(bet : number[], raffles : number[][]) : Record<number, number> {
+
+    const result : Record<number, number> = {};
+
+    raffles.forEach(raffle => {
+        let hit : number = match(bet, raffle);
+        (hit in result) ? result[hit]++ : result[hit] = 1;
+    });
+
+    return result;
+
+}
