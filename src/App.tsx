@@ -74,19 +74,16 @@ export default function App() {
 
             <section className="my-4 py-4 border-top border-bottom">
 
-                <Proofing
-                    bets={ bets }
-                    onChange={ betUpdate }
-                />
+                <Proofing bets={ bets } />
 
             </section>
 
             <section>
 
-            <Totalization
-                price={ price }
-                quantity={ betTotal }
-            />
+                <Totalization
+                    price={ price }
+                    quantity={ betTotal }
+                />
 
             </section>
 

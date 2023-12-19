@@ -51,3 +51,56 @@ export function matches(bet : number[], raffles : number[][]) : Record<number, n
     return result;
 
 }
+
+export function numberOfCombination(sequence : number[], overall : number = 25) : number {
+
+    let count : number = 0;
+    let result : number = 0;
+
+    function combine(start : number = 1, combination : number[] = []) {
+
+        if (combination.length === sequence.length) {
+            ++count;
+
+            if(combination.every(n => sequence.some(s => s === n))) {
+                result = count;
+            }
+
+            return;
+        }
+
+        for (let i = start; i <= overall; i++) {
+            combination.push(i);
+            if(result > 0) return;
+            combine(i + 1, combination);
+            combination.pop();
+        }
+
+    }
+
+    combine();
+
+    return result;
+
+}
+
+export function sum(bet : number[]) : number {
+    return bet.reduce((total, num) => total + num, 0);
+}
+
+export function mean(bet : number[]) : number {
+    return Math.round(sum(bet) / 25);
+}
+
+export function pairs(bet : number[]) : number {
+    return bet.reduce((total, num) => num % 2 === 0 ? total + 1 : total, 0);
+}
+
+function isPrime(num : number) : boolean {
+    for (let i = 2; i < num; i++) if (num % i === 0) return false;
+    return num > 1;
+};
+
+export function primes(bet : number[]) : number {
+    return bet.reduce((total, num) => isPrime(num) ? total + 1 : total, 0);
+}

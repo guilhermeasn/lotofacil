@@ -1,97 +1,42 @@
-// import map from "object-as-array/map";
-// import { ReactNode, useEffect, useState } from "react";
-// import { OverlayTrigger, Table, Tooltip } from "react-bootstrap";
-// import { Bet } from "../App";
-// import { Raffles, raffles } from "../helpers/fetch";
-// import { match } from "../helpers/math";
-// import Loading from "./Loading";
+import map from "object-as-array/map";
+import { useEffect, useState } from "react";
+import { Bet } from "../App";
+import { Raffles, raffles } from "../helpers/fetch";
+import { matches, mean, numberOfCombination, pairs, primes, sum } from "../helpers/math";
+import Loading from "./Loading";
 
-// export type ProofingProps = {
-//     bets : Bet[];
-//     onChange : (index : number, changes : Partial<Bet>) => void;
-// };
+export type ProofingProps = {
+    bets : Bet[]
+}
 
-// export default function Proofing({ bets, onChange } : ProofingProps) {
+type Analytic = {
+    relative : number;
+    sum      : number;
+    mean     : number;
+    pairs    : number;
+    primes   : number;
+    hits     : Record<number, number>
+}
 
-//     const [ data, setData ] = useState<Raffles>(null);
-//     useEffect(() => { if(!data) raffles().then(setData) }, [ data ]);
+export default function Proofing({ bets } : ProofingProps) {
 
-//     useEffect(() => {
-        
-//         if(data && bets.some(bet => bet.valid && !bet.hits.length)) {
-//             bets.forEach((bet, index) => onChange(index, {
-//                 hits: bet.valid ? map(data, (raffle) => match(bet.balls, raffle)) : []
-//             }));
-//         }
+    const [ data, setData ] = useState<Raffles>(null);
+    const [ analytic, setAnalytic ] = useState<Array<Analytic | null>>([]);
 
-//     }, [ data, bets ]); // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        if(data) setAnalytic(bets.map<Analytic | null>(bet => bet.valid ? ({
+            relative : numberOfCombination(bet.balls, 25),
+            sum      : sum(bet.balls),
+            mean     : mean(bet.balls),
+            pairs    : pairs(bet.balls),
+            primes   : primes(bet.balls),
+            hits     : matches(bet.balls, map(data, r => r))
+        }) : null)); else raffles().then(setData);
+    }, [ data, bets ]);
 
-//     return !data ? <Loading /> : (
 
-//         <Table variant="warning" responsive striped bordered hover>
+    console.log(analytic);
 
-//             <thead>
+    return data ? <></> : <Loading />;
 
-//                 <tr>
-
-//                     <th>Sorteios&nbsp;=&gt;</th>
-
-//                     { map(data, (raffle, index) => (
-
-//                         <ThBet key={ index } balls={ raffle }>
-//                             { index }
-//                         </ThBet>
-
-//                     )) }
-
-//                 </tr>
-
-//             </thead>
-
-//             <tbody>
-
-//                 { bets.map((bet, key) => (
-
-//                     <tr key={ key }>
-
-//                         <ThBet balls={ bet.balls }>
-//                             Aposta&nbsp;{ key + 1 }
-//                         </ThBet>
-
-//                         { bet.valid ? bet.hits?.map((hit, key) => (
-//                             <td key={ key }>
-//                                 { hit }
-//                             </td>
-//                         )) : (
-//                             <td className="ps-3 text-danger" colSpan={ Object.keys(data).length - 1 }>
-//                                 Aposta inválida! Verifique!
-//                             </td>
-//                         ) }
-
-//                     </tr>
-
-//                 )) }
-
-//             </tbody>
-
-//         </Table>
-
-//     );
-
-// }
-
-// type ThBetProps = {
-//     balls      : number[];
-//     children   : ReactNode;
-//     className ?: string;
-// }
-
-// function ThBet({ balls, children, className } : ThBetProps) {
-
-//     return (
-//         <OverlayTrigger overlay={ <Tooltip>{ balls.sort((a, b) => a - b).join('-') }</Tooltip> }>
-//             <th className={ className }>{ children }</th>
-//         </OverlayTrigger>
-//     );
-
-// }
+}

@@ -5,5 +5,11 @@
         "activityBar.background": "#2C3003",
         "titleBar.activeBackground": "#3E4405",
         "titleBar.activeForeground": "#F9FDD8"
+    },
+    "material-icon-theme.folders.associations": {
+        ".archive": "Archive"
+    },
+    "files.watcherExclude": {
+        "**/.archive/**": true
     }
 }
