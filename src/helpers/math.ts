@@ -89,7 +89,7 @@ export function sum(bet : number[]) : number {
 }
 
 export function mean(bet : number[]) : number {
-    return Math.round(sum(bet) / 25);
+    return Math.round(sum(bet) / bet.lenght);
 }
 
 export function pairs(bet : number[]) : number {
