@@ -82,6 +82,7 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
                 <div className='h5'>
 
                     <Pill>{ bet.balls.length }&nbsp;números</Pill>
+                    <Pill>{ bet.quantity }&nbsp;{ bet.quantity === 1 ? 'jogo' : 'jogos' }</Pill>
                     <Pill>{ (bet.quantity * price).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) }</Pill>
 
                     { !!analytic && (
