@@ -5,6 +5,7 @@ import { Bet } from "../App";
 import { Raffles, raffles } from "../helpers/fetch";
 import { matches } from "../helpers/math";
 import Loading from "./Loading";
+import reduce from "object-as-array/reduce";
 
 export type ProofingProps = {
     bets : Bet[];
@@ -22,12 +23,12 @@ export default function Proofing({ bets } : ProofingProps) {
 
     return !data ? <Loading /> : (
 
-        <Table variant="warning" striped hover responsive bordered>
+        <Table variant="dark" striped hover responsive>
 
             <thead>
                 <tr className="text-center">
-                    <td>#</td>
-                    { Array(11).fill(5).map((v, k) => <th key={ k }>{ k + v }&nbsp;Acertos</th>) }
+                    <th className="bg-light text-dark">Apostas</th>
+                    { Array(11).fill(5).map((v, k) => <th className="bg-light text-dark" key={ k }>{ k + v }&nbsp;Acertos</th>) }
                 </tr>
             </thead>
 
@@ -35,11 +36,11 @@ export default function Proofing({ bets } : ProofingProps) {
                 { hits.map((hit, index) => (
                     <tr key={ index }>
                         
-                        <th>{ index + 1 }</th>
+                        <th>#{ index + 1 }</th>
 
                         { hit === null
                             ? <td className="text-danger" colSpan={ 18 }>Aposta inválida! Verifique!</td>
-                            : Array(11).fill(5).map((v, k) => <td key={ k }>{ hits?.[index]?.[k + v]?.toString() ?? '0' }</td>)
+                            : Array(11).fill(5).map((v, k) => <td key={ k }>{ hits?.[index]?.[k + v]?.toLocaleString('pt-br') ?? '0' }</td>)
                         }
 
                     </tr>
@@ -48,8 +49,8 @@ export default function Proofing({ bets } : ProofingProps) {
 
             <tfoot>
                 <tr>
-                    <th className="text-center" colSpan={ 8 }>TOTAL</th>
-                    {/* { Array(11).fill(5).map((v, k) => <th key={ k }>{ analytics.reduce((sum, analytic) => sum + (analytic?.hits?.[k + v] ?? 0), 0) }</th>) } */}
+                    <th className="bg-light text-dark">TOTAL</th>
+                    { Array(11).fill(5).map((v, k) => <th className="bg-light text-dark" key={ k }>{ reduce(hits, (total, hit) => total + ((hit as Record<number, number> | null)?.[k + v] ?? 0) ,0).toLocaleString('pt-br') }</th>) }
                 </tr>
             </tfoot>
             

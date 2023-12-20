@@ -1,6 +1,6 @@
 import { useMask } from "mask-hooks";
-import { useEffect, useState } from "react";
-import { Form, InputGroup } from "react-bootstrap";
+import { ReactNode, useEffect, useState } from "react";
+import { Badge, Form, InputGroup } from "react-bootstrap";
 import { Bet } from "../App";
 
 import {
@@ -21,8 +21,6 @@ export type BetInputProps = {
 
 type Analytic = {
     relative : number;
-    length   : number;
-    price    : number;
     sum      : number;
     mean     : number;
     pairs    : number;
@@ -48,8 +46,6 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
     useEffect(() => setAnalytic(bet.valid ? {
 
         relative : numberOfCombination(bet.balls, 25),
-        length   : bet.balls.length,
-        price    : bet.quantity * price,
         sum      : sum(bet.balls),
         mean     : mean(bet.balls),
         pairs    : pairs(bet.balls),
@@ -75,17 +71,46 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
 
             </InputGroup>
 
-            <div className='m-0 p-3 bg-light-gray rounded-bottom border d-flex'>
+            <div className='m-0 p-3 bg-light-gray rounded-bottom border'>
 
                 { !analytic && (
-                    <div className={ analytic === null ? 'text-danger' : 'text-secondary' }>
+                    <div className={ analytic === null ? 'alert alert-danger w-100 p-2' : 'alert alert-warning w-100 p-2' }>
                         { analytic === null ? 'Aposta Inválida!' : 'Insira a sua aposta!' }
                     </div>
                 ) }
+
+                <div className='h5'>
+
+                    <Pill>{ bet.balls.length }&nbsp;números</Pill>
+                    <Pill>{ (bet.quantity * price).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) }</Pill>
+
+                    { !!analytic && (
+
+                        <>
+                        
+                            <Pill>Número Relativo: { analytic.relative }</Pill>
+                            <Pill>Somatório: { analytic.sum }</Pill>
+                            <Pill>Média: { analytic.mean }</Pill>
+                            <Pill>Números Pares: { analytic.pairs }</Pill>
+                            <Pill>Números primos: { analytic.primes }</Pill>
+                        
+                        </>
+
+                    ) }
+
+                </div>
 
             </div>
 
         </div>
 
     )
+}
+
+function Pill({ children } : { children : ReactNode }) {
+    return (
+        <Badge className="m-1" bg='secondary' pill>
+            { children }
+        </Badge>
+    );
 }
