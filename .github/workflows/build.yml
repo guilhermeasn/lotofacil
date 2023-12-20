@@ -19,7 +19,7 @@ permissions:
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   deploy:
@@ -31,14 +31,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build
-        uses: yarn && yarn build
+        run: yarn && yarn build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
           # Upload entire repository
-          path: 'build/'
+          path: './build/'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
