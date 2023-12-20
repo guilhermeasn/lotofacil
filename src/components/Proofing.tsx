@@ -23,7 +23,7 @@ export default function Proofing({ bets } : ProofingProps) {
 
     return !data ? <Loading /> : (
 
-        <Table variant="dark" striped hover responsive>
+        <Table variant="info" striped hover responsive>
 
             <thead>
                 <tr className="text-center">
