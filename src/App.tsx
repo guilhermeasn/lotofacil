@@ -74,7 +74,10 @@ export default function App() {
 
             <section className="my-4 py-4 border-top border-bottom">
 
-                <Proofing bets={ bets } />
+                <Proofing
+                    price={ price }
+                    bets={ bets }
+                />
 
             </section>
 

@@ -30,7 +30,7 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
 
         <InputGroup className="mb-3">
 
-            <InputGroup.Text className="d-none d-md-block bg-dark text-light">
+            <InputGroup.Text className="bg-dark text-light">
                 { index + 1 }
             </InputGroup.Text>
 
@@ -40,11 +40,11 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
                 onChange={ input => setValue(mask(input.currentTarget.value)) }
             />
 
-            <InputGroup.Text className="d-none d-sm-block">
+            <InputGroup.Text className="d-none d-lg-block">
                 { bet.balls.length } números
             </InputGroup.Text>
 
-            <InputGroup.Text className="d-none d-md-block">
+            <InputGroup.Text className="d-none d-lg-block">
                 { (bet.valid ? bet.quantity * price : 0 ).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) }
             </InputGroup.Text>
 

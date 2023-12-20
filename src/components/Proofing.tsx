@@ -7,11 +7,14 @@ import { matches, mean, numberOfCombination, pairs, primes, sum } from "../helpe
 import Loading from "./Loading";
 
 export type ProofingProps = {
-    bets : Bet[]
+    price : number;
+    bets : Bet[];
 }
 
 type Analytic = {
     relative : number;
+    quantity : number;
+    price    : number;
     sum      : number;
     mean     : number;
     pairs    : number;
@@ -19,7 +22,7 @@ type Analytic = {
     hits     : Record<number, number>
 }
 
-export default function Proofing({ bets } : ProofingProps) {
+export default function Proofing({ price, bets } : ProofingProps) {
 
     const [ data, setData ] = useState<Raffles>(null);
     const [ analytics, setAnalytics ] = useState<Array<Analytic | null>>([]);
@@ -27,13 +30,15 @@ export default function Proofing({ bets } : ProofingProps) {
     useEffect(() => {
         if(data) setAnalytics(bets.map<Analytic | null>(bet => bet.valid ? ({
             relative : numberOfCombination(bet.balls, 25),
+            quantity : bet.balls.length,
+            price    : bet.quantity * price,
             sum      : sum(bet.balls),
             mean     : mean(bet.balls),
             pairs    : pairs(bet.balls),
             primes   : primes(bet.balls),
             hits     : matches(bet.balls, map(data, r => r))
         }) : null)); else raffles().then(setData);
-    }, [ data, bets ]);
+    }, [ data, bets, price ]);
 
     return !data ? <Loading /> : (
 
@@ -43,6 +48,8 @@ export default function Proofing({ bets } : ProofingProps) {
                 <tr className="text-center">
                     <td>#</td>
                     <th>Número&nbsp;Relativo</th>
+                    <th>Quantidade&nbsp;de&nbsp;Números</th>
+                    <th>Valor&nbsp;da&nbsp;Aposta</th>
                     <th>Somatório</th>
                     <th>Média</th>
                     <th>Números&nbsp;Pares</th>
@@ -56,9 +63,11 @@ export default function Proofing({ bets } : ProofingProps) {
                     <tr key={ index }>
                         <th>{ index + 1 }</th>
 
-                        { analytic === null ? <td className="text-danger" colSpan={ 16 }>Aposta inválida! Verifique!</td> : <>
+                        { analytic === null ? <td className="text-danger" colSpan={ 18 }>Aposta inválida! Verifique!</td> : <>
                         
                             <td>{ analytic.relative.toLocaleString('pt-BR') }</td>
+                            <td>{ analytic.quantity }</td>
+                            <td>{ analytic.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) }</td>
                             <td>{ analytic.sum }</td>
                             <td>{ analytic.mean }</td>
                             <td>{ analytic.pairs }</td>
@@ -73,7 +82,7 @@ export default function Proofing({ bets } : ProofingProps) {
 
             <tfoot>
                 <tr>
-                    <th className="text-center" colSpan={ 6 }>TOTAL</th>
+                    <th className="text-center" colSpan={ 8 }>TOTAL</th>
                     { Array(11).fill(5).map((v, k) => <th key={ k }>{ analytics.reduce((sum, analytic) => sum + (analytic?.hits?.[k + v] ?? 0), 0) }</th>) }
                 </tr>
             </tfoot>
