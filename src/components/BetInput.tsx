@@ -2,7 +2,15 @@ import { useMask } from "mask-hooks";
 import { useEffect, useState } from "react";
 import { Form, InputGroup } from "react-bootstrap";
 import { Bet } from "../App";
-import { betQuantity } from "../helpers/math";
+
+import {
+    betQuantity,
+    mean,
+    numberOfCombination,
+    pairs, 
+    primes,
+    sum
+} from "../helpers/math";
 
 export type BetInputProps = {
     index : number;
@@ -11,12 +19,23 @@ export type BetInputProps = {
     onChange : (index : number, bet : Bet) => void;
 }
 
+type Analytic = {
+    relative : number;
+    length   : number;
+    price    : number;
+    sum      : number;
+    mean     : number;
+    pairs    : number;
+    primes   : number;
+}
+
 const maskDefaut : string = Array.from({ length: 20 }, () => '[1-25]').join('-');
 
 export default function BetInput({ index, bet, price, onChange } : BetInputProps) {
 
     const mask = useMask({ masks: [ maskDefaut ] });
     const [ value, setValue ] = useState<string>(bet.balls.join('-'));
+    const [ analytic, setAnalytic ] = useState<Analytic | null>();
 
     useEffect(() => {
 
@@ -26,29 +45,47 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
 
     }, [ value ]); // eslint-disable-line react-hooks/exhaustive-deps
 
+    useEffect(() => setAnalytic(bet.valid ? {
+
+        relative : numberOfCombination(bet.balls, 25),
+        length   : bet.balls.length,
+        price    : bet.quantity * price,
+        sum      : sum(bet.balls),
+        mean     : mean(bet.balls),
+        pairs    : pairs(bet.balls),
+        primes   : primes(bet.balls)
+
+    } : bet.balls.length ? null : undefined), [ bet, price ]);
+
     return (
 
-        <InputGroup className="mb-3">
+        <div className="mb-3">
 
-            <InputGroup.Text className="bg-dark text-light">
-                { index + 1 }
-            </InputGroup.Text>
+            <InputGroup className="mb-0">
 
-            <Form.Control
-                value={ value }
-                className={ value ? bet.valid ? 'input-success' : 'input-error' : undefined }
-                onChange={ input => setValue(mask(input.currentTarget.value)) }
-            />
+                <InputGroup.Text className="bg-dark text-light rounded-bottom-none">
+                    { index + 1 }
+                </InputGroup.Text>
 
-            <InputGroup.Text className="d-none d-lg-block">
-                { bet.balls.length } números
-            </InputGroup.Text>
+                <Form.Control
+                    value={ value }
+                    className={ 'rounded-bottom-none ' + (value ? bet.valid ? 'input-success' : 'input-error' : '') }
+                    onChange={ input => setValue(mask(input.currentTarget.value)) }
+                />
 
-            <InputGroup.Text className="d-none d-lg-block">
-                { (bet.valid ? bet.quantity * price : 0 ).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) }
-            </InputGroup.Text>
+            </InputGroup>
 
-        </InputGroup>
+            <div className='m-0 p-3 bg-light-gray rounded-bottom border d-flex'>
+
+                { !analytic && (
+                    <div className={ analytic === null ? 'text-danger' : 'text-secondary' }>
+                        { analytic === null ? 'Aposta Inválida!' : 'Insira a sua aposta!' }
+                    </div>
+                ) }
+
+            </div>
+
+        </div>
 
     )
 }

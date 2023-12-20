@@ -3,42 +3,22 @@ import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { Bet } from "../App";
 import { Raffles, raffles } from "../helpers/fetch";
-import { matches, mean, numberOfCombination, pairs, primes, sum } from "../helpers/math";
+import { matches } from "../helpers/math";
 import Loading from "./Loading";
 
 export type ProofingProps = {
-    price : number;
     bets : Bet[];
 }
 
-type Analytic = {
-    relative : number;
-    quantity : number;
-    price    : number;
-    sum      : number;
-    mean     : number;
-    pairs    : number;
-    primes   : number;
-    hits     : Record<number, number>
-}
-
-export default function Proofing({ price, bets } : ProofingProps) {
+export default function Proofing({ bets } : ProofingProps) {
 
     const [ data, setData ] = useState<Raffles>(null);
-    const [ analytics, setAnalytics ] = useState<Array<Analytic | null>>([]);
+    const [ hits, setHits ] = useState<Array<Record<number, number> | null>>([]);
 
     useEffect(() => {
-        if(data) setAnalytics(bets.map<Analytic | null>(bet => bet.valid ? ({
-            relative : numberOfCombination(bet.balls, 25),
-            quantity : bet.balls.length,
-            price    : bet.quantity * price,
-            sum      : sum(bet.balls),
-            mean     : mean(bet.balls),
-            pairs    : pairs(bet.balls),
-            primes   : primes(bet.balls),
-            hits     : matches(bet.balls, map(data, r => r))
-        }) : null)); else raffles().then(setData);
-    }, [ data, bets, price ]);
+        if(data) setHits(bets.map<Record<number, number> | null>(bet => bet.valid ? matches(bet.balls, map(data, r => r)) : null));
+        else raffles().then(setData);
+    }, [ data, bets ]);
 
     return !data ? <Loading /> : (
 
@@ -47,34 +27,20 @@ export default function Proofing({ price, bets } : ProofingProps) {
             <thead>
                 <tr className="text-center">
                     <td>#</td>
-                    <th>Número&nbsp;Relativo</th>
-                    <th>Quantidade&nbsp;de&nbsp;Números</th>
-                    <th>Valor&nbsp;da&nbsp;Aposta</th>
-                    <th>Somatório</th>
-                    <th>Média</th>
-                    <th>Números&nbsp;Pares</th>
-                    <th>Números&nbsp;Primos</th>
                     { Array(11).fill(5).map((v, k) => <th key={ k }>{ k + v }&nbsp;Acertos</th>) }
                 </tr>
             </thead>
 
             <tbody>
-                { analytics.map((analytic, index) => (
+                { hits.map((hit, index) => (
                     <tr key={ index }>
+                        
                         <th>{ index + 1 }</th>
 
-                        { analytic === null ? <td className="text-danger" colSpan={ 18 }>Aposta inválida! Verifique!</td> : <>
-                        
-                            <td>{ analytic.relative.toLocaleString('pt-BR') }</td>
-                            <td>{ analytic.quantity }</td>
-                            <td>{ analytic.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) }</td>
-                            <td>{ analytic.sum }</td>
-                            <td>{ analytic.mean }</td>
-                            <td>{ analytic.pairs }</td>
-                            <td>{ analytic.primes }</td>
-                            { Array(11).fill(5).map((v, k) => <td key={ k }>{ analytic.hits?.[k + v] ?? 0 }</td>) }
-
-                        </> }
+                        { hit === null
+                            ? <td className="text-danger" colSpan={ 18 }>Aposta inválida! Verifique!</td>
+                            : Array(11).fill(5).map((v, k) => <td key={ k }>{ hits?.[index]?.[k + v]?.toString() ?? '0' }</td>)
+                        }
 
                     </tr>
                 )) }
@@ -83,7 +49,7 @@ export default function Proofing({ price, bets } : ProofingProps) {
             <tfoot>
                 <tr>
                     <th className="text-center" colSpan={ 8 }>TOTAL</th>
-                    { Array(11).fill(5).map((v, k) => <th key={ k }>{ analytics.reduce((sum, analytic) => sum + (analytic?.hits?.[k + v] ?? 0), 0) }</th>) }
+                    {/* { Array(11).fill(5).map((v, k) => <th key={ k }>{ analytics.reduce((sum, analytic) => sum + (analytic?.hits?.[k + v] ?? 0), 0) }</th>) } */}
                 </tr>
             </tfoot>
             

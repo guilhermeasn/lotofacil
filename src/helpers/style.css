@@ -16,3 +16,12 @@ body {
     border-color: #aef1b5 !important;
     color: #15581c !important;
 }
+
+.bg-light-gray {
+    background-color: #e9ecef !important;
+}
+
+.rounded-bottom-none {
+    border-bottom-left-radius: 0% !important;
+    border-bottom-right-radius: 0% !important;
+}
