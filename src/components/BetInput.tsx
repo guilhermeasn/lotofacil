@@ -73,11 +73,11 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
 
             <div className='m-0 p-3 bg-light-gray rounded-bottom border'>
 
-                { !analytic && (
+                { /* !analytic && (
                     <div className={ analytic === null ? 'alert alert-danger w-100 p-2' : 'alert alert-warning w-100 p-2' }>
                         { analytic === null ? 'Aposta Inválida!' : 'Insira a sua aposta!' }
                     </div>
-                ) }
+                ) */ }
 
                 <div className='h5'>
 
