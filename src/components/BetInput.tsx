@@ -7,7 +7,7 @@ import {
     betQuantity,
     mean,
     numberOfCombination,
-    pairs, 
+    pairs,
     primes,
     sum
 } from "../helpers/math";
@@ -82,14 +82,14 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
                 <div className='h5'>
 
                     <Pill>{ bet.balls.length }&nbsp;números</Pill>
-                    <Pill>{ bet.quantity }&nbsp;{ bet.quantity === 1 ? 'jogo' : 'jogos' }</Pill>
+                    <Pill>{ bet.quantity.toLocaleString('pt-br') }&nbsp;{ bet.quantity === 1 ? 'jogo' : 'jogos' }</Pill>
                     <Pill>{ (bet.quantity * price).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) }</Pill>
 
                     { !!analytic && (
 
                         <>
                         
-                            <Pill>Número Relativo: { analytic.relative }</Pill>
+                            <Pill>Número Relativo: { analytic.relative.toLocaleString('pt-br') }</Pill>
                             <Pill>Somatório: { analytic.sum }</Pill>
                             <Pill>Média: { analytic.mean }</Pill>
                             <Pill>Números Pares: { analytic.pairs }</Pill>
