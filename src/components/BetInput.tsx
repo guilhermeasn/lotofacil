@@ -32,7 +32,7 @@ const maskDefaut : string = Array.from({ length: 20 }, () => '[1-25]').join('-')
 export default function BetInput({ index, bet, price, onChange } : BetInputProps) {
 
     const mask = useMask({ masks: [ maskDefaut ] });
-    const [ value, setValue ] = useState<string>(bet.balls.join('-'));
+    const [ value, setValue ] = useState<string>(bet.balls.map(ball => ball.toString().length === 1 ? `0${ball}` : ball.toString()).join('-'));
     const [ analytic, setAnalytic ] = useState<Analytic | null>();
 
     useEffect(() => {

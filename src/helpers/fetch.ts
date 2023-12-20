@@ -1,4 +1,5 @@
 import reduce from "object-as-array/reduce";
+import { Bet } from "../App";
 
 export type Raffles = Record<number, number[]> | null;
 
@@ -19,4 +20,24 @@ export async function raffles() : Promise<Raffles> {
 
     }
 
+}
+
+export function save(bets : Bet[]) : boolean {
+    try {
+        localStorage.setItem('lotofacil_bets', JSON.stringify(bets));
+        return true;
+    } catch(error) {
+        console.error(error);
+        return false;
+    }
+}
+
+export function restore() : Bet[] | null {
+    try {
+        const data = localStorage.getItem('lotofacil_bets');
+        return data ? JSON.parse(data) : null;
+    } catch(error) {
+        console.error(error);
+        return null;
+    }
 }

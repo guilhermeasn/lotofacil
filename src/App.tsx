@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 
 import BetInput from "./components/BetInput";
@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Proofing from "./components/Proofing";
 import Totalization from "./components/Totalization";
+import { restore, save } from "./helpers/fetch";
 
 /**
  * ### Dados da Aposta
@@ -31,7 +32,8 @@ const price : number = 3;
 
 export default function App() {
 
-    const [ bets, setBets ] = useState<Bet[]>([ betEmpty ]);
+    const [ bets, setBets ] = useState<Bet[]>(restore() ?? [ betEmpty ]);
+    useEffect(() => { save(bets); }, [ bets ]);
 
     const betQuantity = (value : number) : void => {
         const newBets : Bet[] = [];
@@ -46,6 +48,7 @@ export default function App() {
     }
 
     const betTotal : number = bets.reduce((p, c) => p + (c.valid ? c.quantity : 0), 0);
+
 
     return <>
 
