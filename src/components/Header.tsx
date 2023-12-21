@@ -10,13 +10,15 @@ export default function Header({ onRaffle, onStatistic } : HeaderProps) {
     return (
         <Navbar as='header' bg="primary" data-bs-theme="dark">
             <Container>
-                <Navbar.Brand>Lotofácil</Navbar.Brand>
+                <Navbar.Brand href=".">Lotofácil</Navbar.Brand>
                 <div className="text-light d-flex">
-                    <div className="clickable me-3" onClick={ onRaffle }>
-                        <FaEye size={ 25 } /> Sorteios
+                    <div className="clickable me-2" title="Sorteios" onClick={ onRaffle }>
+                        <FaEye size={ 25 } />
+                        <span className="d-none d-md-inline-block">&nbsp;Sorteios</span>
                     </div>
-                    <div className="clickable" onClick={ onStatistic }>
-                        <FaChartLine size={ 25 } /> Estatística
+                    <div className="clickable ms-2" title="Estatística" onClick={ onStatistic }>
+                        <FaChartLine size={ 25 } />
+                        <span className="d-none d-md-inline-block">&nbsp;Estatística</span>
                     </div>
                 </div>
             </Container>

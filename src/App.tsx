@@ -5,6 +5,7 @@ import BetInput from "./components/BetInput";
 import BetQuantity from "./components/BetQuantity";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import ModalRaffle from "./components/ModalRaffle";
 import Proofing from "./components/Proofing";
 import Totalization from "./components/Totalization";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
@@ -38,6 +39,8 @@ export default function App() {
     const [ bets, setBets ] = useState<Bet[]>(restore() ?? [ betEmpty ]);
     useEffect(() => { save(bets); }, [ bets ]);
 
+    const [ modalRaffle, setModalRaffle ] = useState<boolean>(false);
+
     const betQuantity = (value : number) : void => {
         const newBets : Bet[] = [];
         for(let c = 0; c < value; c++) newBets.push(bets?.[c] ?? betEmpty);
@@ -55,7 +58,9 @@ export default function App() {
 
     return <>
 
-       <Header />
+        <Header
+            onRaffle={ () => setModalRaffle(true) }
+        />
 
         <Container as='main' className="py-3">
 
@@ -99,6 +104,12 @@ export default function App() {
         </Container>
 
         <Footer />
+
+        <ModalRaffle
+            data={ data }
+            show={ modalRaffle }
+            onHide={ () => setModalRaffle(false) }
+        />
 
     </>;
 

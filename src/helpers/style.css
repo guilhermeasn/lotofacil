@@ -21,10 +21,5 @@ body {
     background-color: #e9ecef !important;
 }
 
-.rounded-bottom-none {
-    border-bottom-left-radius: 0% !important;
-    border-bottom-right-radius: 0% !important;
-}
-
 .clickable { cursor: pointer !important; }
 .clickable:hover { filter: brightness(90%); }

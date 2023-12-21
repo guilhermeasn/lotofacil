@@ -18,13 +18,9 @@ export type ProofingProps = {
 export default function Proofing({ data, bets } : ProofingProps) {
 
     const [ last, setLast ] = useState<number>(0);
-    // const [ data, setData ] = useState<Raffles>(null);
     const [ hits, setHits ] = useState<Array<Record<number, number> | null>>([]);
 
-    useEffect(() => {
-        if(data) setLast(parseInt(Object.keys(data)[Object.keys(data).length-1]));
-        // else raffles().then(setData);
-    }, [ data, bets ]);
+    useEffect(() => { if(data) setLast(parseInt(Object.keys(data)[Object.keys(data).length-1])); }, [ data, bets ]);
 
     const [ selection, setSelection ] = useState<[ boolean, number, number ]>([ true, 1, 1 ]);
     useEffect(() => { if(data) setSelection([ true, 1, last ])}, [ data, last ]);
@@ -55,8 +51,8 @@ export default function Proofing({ data, bets } : ProofingProps) {
         <div className="d-sm-flex justify-content-center mb-4">
 
             <FloatingLabel className="mx-3" label="Comparar com">
-                <Form.Select disabled={ !last } onChange={ input => onSelection(parseInt(input.currentTarget.value)) }>
-                    <option selected value={ last.toString() }>todos os sorteios</option>
+                <Form.Select disabled={ !last } onChange={ input => onSelection(parseInt(input.currentTarget.value)) } defaultValue={ last.toString() }>
+                    <option value={ last.toString() }>todos os sorteios</option>
                     <option value="30">últimos trinta sorteios</option>
                     <option value="24">últimos vinte e quatro sorteios</option>
                     <option value="18">últimos dezoito sorteios</option>

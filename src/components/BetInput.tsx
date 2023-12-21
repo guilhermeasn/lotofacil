@@ -59,13 +59,13 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
 
             <InputGroup className="mb-0">
 
-                <InputGroup.Text className="bg-dark text-light rounded-bottom-none">
+                <InputGroup.Text className="bg-dark text-light rounded-bottom-0">
                     { index + 1 }
                 </InputGroup.Text>
 
                 <Form.Control
                     value={ value }
-                    className={ 'rounded-bottom-none ' + (value ? bet.valid ? 'input-success' : 'input-error' : '') }
+                    className={ 'rounded-bottom-0 ' + (value ? bet.valid ? 'input-success' : 'input-error' : '') }
                     onChange={ input => setValue(mask(input.currentTarget.value)) }
                 />
 
