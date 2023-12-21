@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Proofing from "./components/Proofing";
 import Totalization from "./components/Totalization";
-import { restore, save } from "./helpers/fetch";
+import { Raffles, raffles, restore, save } from "./helpers/fetch";
 
 /**
  * ### Dados da Aposta
@@ -31,6 +31,9 @@ const betEmpty : Bet = {
 const price : number = 3;
 
 export default function App() {
+
+    const [ data, setData ] = useState<Raffles>(null);
+    useEffect(() => { if(!data) raffles().then(setData); }, [ data ]);
 
     const [ bets, setBets ] = useState<Bet[]>(restore() ?? [ betEmpty ]);
     useEffect(() => { save(bets); }, [ bets ]);
@@ -78,6 +81,7 @@ export default function App() {
             <section className="my-4 py-4 border-top border-bottom">
 
                 <Proofing
+                    data={ data }
                     bets={ bets }
                 />
 

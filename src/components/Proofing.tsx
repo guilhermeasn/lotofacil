@@ -4,7 +4,7 @@ import reduce from "object-as-array/reduce";
 import { useEffect, useState } from "react";
 import { FloatingLabel, Form, Table } from "react-bootstrap";
 import { Bet } from "../App";
-import { Raffles, raffles } from "../helpers/fetch";
+import { Raffles } from "../helpers/fetch";
 import { matches } from "../helpers/math";
 
 import filter from "object-as-array/filter";
@@ -12,17 +12,18 @@ import Loading from "./Loading";
 
 export type ProofingProps = {
     bets : Bet[];
+    data : Raffles;
 }
 
-export default function Proofing({ bets } : ProofingProps) {
+export default function Proofing({ data, bets } : ProofingProps) {
 
     const [ last, setLast ] = useState<number>(0);
-    const [ data, setData ] = useState<Raffles>(null);
+    // const [ data, setData ] = useState<Raffles>(null);
     const [ hits, setHits ] = useState<Array<Record<number, number> | null>>([]);
 
     useEffect(() => {
         if(data) setLast(parseInt(Object.keys(data)[Object.keys(data).length-1]));
-        else raffles().then(setData);
+        // else raffles().then(setData);
     }, [ data, bets ]);
 
     const [ selection, setSelection ] = useState<[ boolean, number, number ]>([ true, 1, 1 ]);
@@ -51,7 +52,7 @@ export default function Proofing({ bets } : ProofingProps) {
 
     return !data ? <Loading /> : <>
 
-        <div className="d-flex justify-content-center mb-4">
+        <div className="d-sm-flex justify-content-center mb-4">
 
             <FloatingLabel className="mx-3" label="Comparar com">
                 <Form.Select disabled={ !last } onChange={ input => onSelection(parseInt(input.currentTarget.value)) }>
