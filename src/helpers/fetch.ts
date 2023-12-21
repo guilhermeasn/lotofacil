@@ -22,6 +22,36 @@ export async function raffles() : Promise<Raffles> {
 
 }
 
+export type Statistic = {
+    ones       : { [key in string] : number };
+    tens       : { [key in string] : number };
+    sums       : { [key in string] : number };
+    mean       : { [key in string] : number };
+    pairs      : { [key in string] : number };
+    primes     : { [key in string] : number };
+    quantity   : { [key in string] : number };
+    sequential : Array<{ [key in string] : number }>;
+}
+
+export async function statistic() : Promise<Statistic | null> {
+
+    try {
+
+        const URL = 'https://raw.githubusercontent.com/guilhermeasn/loteria.json/master/data/lotofacil.analytic.json';
+        const respost = await fetch(URL);
+        const result = await respost.json();
+        
+        return result as Statistic;
+
+    } catch(err) {
+
+        console.error(err);
+        return null;
+
+    }
+
+}
+
 export function save(bets : Bet[]) : boolean {
     try {
         localStorage.setItem('lotofacil_bets', JSON.stringify(bets));
