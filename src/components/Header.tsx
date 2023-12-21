@@ -9,7 +9,7 @@ export type HeaderProps = {
 export default function Header({ onRaffle, onStatistic } : HeaderProps) {
     return (
         <Navbar as='header' bg="primary" data-bs-theme="dark">
-            <Container>
+            <Container className="user-select-none">
                 <Navbar.Brand href=".">Lotofácil</Navbar.Brand>
                 <div className="text-light d-flex">
                     <div className="clickable me-2" title="Sorteios" onClick={ onRaffle }>

@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
-import { Button, FormControl, Modal } from "react-bootstrap";
+import copy from "copy-to-clipboard";
+import { useEffect, useRef, useState } from "react";
+import { Button, FormControl, Modal, Overlay, Tooltip } from "react-bootstrap";
+import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { Raffles } from "../helpers/fetch";
 import Loading from "./Loading";
 
@@ -11,10 +13,26 @@ export type ModalRaffleProps = {
 
 export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
 
-    const min : number | undefined = data ? parseInt(Object.keys(data)[0]) : undefined;
     const max : number | undefined = data ? parseInt(Object.keys(data)[Object.keys(data).length-1]) : undefined;
 
-    const [ selection, setSelection ] = useState<[ number, number[] ]>();
+    const buttonCopy = useRef(null);
+    const [ alert, setAlert ] = useState<boolean>(false);
+    const [ selection, setSelection ] = useState<[ number | undefined, number[] ]>();
+
+    const onSelection = (num : number) : void => {
+        if(!data || !max) return;
+        if(isNaN(num)) setSelection(selection ? [ undefined, selection[1] ] : undefined);
+        if(num < 1) num = 1;
+        if(num > max) return;
+        setSelection([ num, data[num] ]);
+    }
+
+    const onCopy = () : void => {
+        if(!selection) return;
+        if(!copy(selection[1].sort((a, b) => a - b).map(n => (n < 10 ? '0' : '') + n.toString()).join('-'))) return;
+        setAlert(true);
+        setTimeout(() => setAlert(false), 5000);
+    }
 
     useEffect(() => {
         if(!data || !max) return;
@@ -25,27 +43,35 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
 
         <Modal show={ show } onHide={ onHide } centered>
 
-            <Modal.Header className="alert alert-info rounded-bottom-0" closeButton>
+            <Modal.Header className="alert alert-info rounded-bottom-0 user-select-none" closeButton>
                 <Modal.Title>Sorteios</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
 
-                <div className="p-4 pt-0">
+                <div className="p-4 pt-0 d-flex">
+
+                    <FaCaretLeft
+                        onClick={ () => onSelection(selection && selection[0] ? selection[0] - 1 : 1) }
+                        className="clickable text-primary"
+                        size={ 50 }
+                    />
+
                     <FormControl
                         className="text-center"
                         type="number"
-                        min={ min }
+                        min={ 1 }
                         max={ max }
                         value={ selection[0] }
-                        onChange={ input => {
-                            if(!data || !min || !max) return;
-                            const num : number = parseInt(input.currentTarget.value);
-                            if(num < min) return;
-                            if(num > max) return;
-                            if(!isNaN(num)) setSelection([ num, data[num] ]);
-                        } }
+                        onChange={ input => onSelection(parseInt(input.currentTarget.value)) }
                     />
+
+                    <FaCaretRight
+                        onClick={ () => onSelection(selection && selection[0] ? selection[0] + 1 : max ?? 1) }
+                        className="clickable text-primary"
+                        size={ 50 }
+                    />
+
                 </div>
 
                 { Array(5).fill(5).map((v, k) => (
@@ -60,7 +86,7 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
                             return (
                                 <div
                                     key={ num }
-                                    className={ "border m-1 p-3 h5 rounded-5" + (hit ? ' bg-success-subtle border-success text-success' : ' text-muted') }
+                                    className={ "border m-1 p-3 h5 rounded-5" + (hit ? ' bg-success-subtle border-success text-success' : ' text-muted user-select-none') }
                                 >
                                     { (num < 10 ? '0' : '') + num.toString() }
                                 </div>
@@ -75,9 +101,23 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="secondary" onClick={ onHide }>
+
+                <Button variant="outline-secondary" onClick={ onHide }>
                     Fechar
                 </Button>
+
+                <Button ref={ buttonCopy } variant="outline-success" onClick={ onCopy }>
+                    Copiar
+                </Button>
+
+                <Overlay target={ buttonCopy.current } show={ alert } placement="top">
+                    { (props) => (
+                        <Tooltip { ...props }>
+                            Os números do sorteio foram copiados!
+                        </Tooltip>
+                    ) }
+                </Overlay>
+
             </Modal.Footer>
 
       </Modal>
