@@ -102,7 +102,7 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
 
             <Modal.Footer>
 
-                <Button variant="outline-secondary" onClick={ onHide }>
+                <Button variant="secondary" onClick={ onHide }>
                     Fechar
                 </Button>
 
