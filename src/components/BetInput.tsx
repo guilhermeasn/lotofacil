@@ -65,6 +65,7 @@ export default function BetInput({ index, bet, price, onChange } : BetInputProps
 
                 <Form.Control
                     value={ value }
+                    placeholder="digite aqui os números da sua aposta"
                     className={ 'rounded-bottom-0 ' + (value ? bet.valid ? 'input-success' : 'input-error' : '') }
                     onChange={ input => setValue(mask(input.currentTarget.value)) }
                 />
