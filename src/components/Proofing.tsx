@@ -1,11 +1,10 @@
-import map from "object-as-array/map";
 import reduce from "object-as-array/reduce";
 
 import { useEffect, useState } from "react";
 import { FloatingLabel, Form, Table } from "react-bootstrap";
 import { Bet } from "../App";
 import { Raffles } from "../helpers/fetch";
-import { matches } from "../helpers/math";
+import { whoMatches } from "../helpers/math";
 
 import filter from "object-as-array/filter";
 import Loading from "./Loading";
@@ -18,7 +17,7 @@ export type ProofingProps = {
 export default function Proofing({ data, bets } : ProofingProps) {
 
     const [ last, setLast ] = useState<number>(0);
-    const [ hits, setHits ] = useState<Array<Record<number, number> | null>>([]);
+    const [ hits, setHits ] = useState<Array<Record<number, number[]> | null>>([]);
 
     useEffect(() => { if(data) setLast(parseInt(Object.keys(data)[Object.keys(data).length-1])); }, [ data, bets ]);
 
@@ -42,8 +41,8 @@ export default function Proofing({ data, bets } : ProofingProps) {
 
     useEffect(() => {
         if(!data) return;
-        const dataset = map(filter(data, (_, k) => k >= selection[1] && k <= selection[2]), r => r);
-        if(dataset) setHits(bets.map<Record<number, number> | null>(bet => bet.valid ? matches(bet.balls, dataset as number[][]) : null));
+        const dataset = filter(data, (_, k) => k >= selection[1] && k <= selection[2]) as Record<number, number[]>;
+        if(dataset) setHits(bets.map<Record<number, number[]> | null>(bet => bet.valid ? whoMatches(bet.balls, dataset) : null));
     }, [bets, data, selection]);
 
     return !data ? <Loading /> : <>
@@ -101,7 +100,7 @@ export default function Proofing({ data, bets } : ProofingProps) {
 
                         { hit === null
                             ? <td className="text-danger" colSpan={ 18 }>Aposta inválida! Verifique!</td>
-                            : Array(11).fill(5).map((v, k) => <td key={ k }>{ hits?.[index]?.[k + v]?.toLocaleString('pt-br') ?? '0' }</td>)
+                            : Array(11).fill(5).map((v, k) => <td key={ k }  onDoubleClick={ () => console.log(hits?.[index]?.[k + v]?.join()?.toString() ?? 'zero') } title={ hits?.[index]?.[k + v]?.join() }>{ hits?.[index]?.[k + v]?.length.toLocaleString('pt-br') ?? '0' }</td>)
                         }
 
                     </tr>
@@ -111,7 +110,7 @@ export default function Proofing({ data, bets } : ProofingProps) {
             <tfoot>
                 <tr>
                     <th className="bg-dark text-light">TOTAL</th>
-                    { Array(11).fill(5).map((v, k) => <th className="bg-dark text-light" key={ k }>{ reduce(hits, (total, hit) => total + ((hit as Record<number, number> | null)?.[k + v] ?? 0) ,0).toLocaleString('pt-br') }</th>) }
+                    { Array(11).fill(5).map((v, k) => <th className="bg-dark text-light" key={ k }>{ reduce(hits, (total, hit) => total + ((hit as Record<number, number[]> | null)?.[k + v]?.length ?? 0) ,0).toLocaleString('pt-br') }</th>) }
                 </tr>
             </tfoot>
             

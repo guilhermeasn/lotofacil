@@ -1,3 +1,5 @@
+import forEach from "object-as-array/forEach";
+
 export function factorial(num : number) : number {
     let calc : number = num;
     while(num > 1) calc *= --num;
@@ -46,6 +48,20 @@ export function matches(bet : number[], raffles : number[][]) : Record<number, n
     raffles.forEach(raffle => {
         let hit : number = match(bet, raffle);
         (hit in result) ? result[hit]++ : result[hit] = 1;
+    });
+
+    return result;
+
+}
+
+export function whoMatches(bet : number[], raffles : Record<number, number[]>) : Record<number, number[]> {
+
+    const result : Record<number, number[]> = {};
+
+     forEach(raffles, (raffle, num) => {
+        let hit : number = match(bet, raffle);
+        if(!(hit in result)) result[hit] = [];
+        result[hit].push(num);
     });
 
     return result;
