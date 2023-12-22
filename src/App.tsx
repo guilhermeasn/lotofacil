@@ -8,6 +8,7 @@ import ModalRaffle from "./components/ModalRaffle";
 import ModalStatistic from "./components/ModalStatistic";
 import Proofing from "./components/Proofing";
 import Totalization from "./components/Totalization";
+
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
 
 const price : number = 3;
@@ -22,17 +23,9 @@ export default function App() {
 
     const [ modal, setModal ] = useState<'bet'|'raffle'|'statistic'|null>(null);
 
-    const betAdd = (bet : number[]) => {
-        setBets(bets => [ ...bets, bet ]);
-    }
-
-    const betDel = (index : keyof typeof bets) : void => {
-        setBets(bets => bets.filter((_, key) => key !== index));
-    }
-
-    const betUp = (index : keyof typeof bets, bet : number[]) : void => {
-        setBets(bets => bets.map((old, key) => key === index ? bet : old));
-    }
+    const betAdd = (bet : number[]) => setBets(bets => [ ...bets, bet ]);
+    const betDel = (index : number) => setBets(bets => bets.filter((_, key) => key !== index));
+    const betUpdate = (index : number, bet : number[]) => setBets(bets => bets.map((old, key) => key === index ? bet : old));
 
     // const betTotal : number = bets.reduce((p, c) => p + (c.valid ? c.quantity : 0), 0);
 
