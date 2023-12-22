@@ -1,7 +1,7 @@
 import reduce from "object-as-array/reduce";
 
 import { useEffect, useState } from "react";
-import { FloatingLabel, Form, Table } from "react-bootstrap";
+import { FloatingLabel, Form, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import { Bet } from "../App";
 import { Raffles } from "../helpers/fetch";
 import { whoMatches } from "../helpers/math";
@@ -88,7 +88,11 @@ export default function Proofing({ data, bets } : ProofingProps) {
             <thead>
                 <tr className="text-center">
                     <th className="bg-light text-dark">Apostas</th>
-                    { Array(11).fill(5).map((v, k) => <th className="bg-light text-dark" key={ k }>{ k + v }&nbsp;Acertos</th>) }
+                    { Array(11).fill(5).map((v, k) => (
+                        <th className="bg-light text-dark" key={ k }>
+                            { k + v }&nbsp;Acertos
+                        </th>
+                    )) }
                 </tr>
             </thead>
 
@@ -100,7 +104,13 @@ export default function Proofing({ data, bets } : ProofingProps) {
 
                         { hit === null
                             ? <td className="text-danger" colSpan={ 18 }>Aposta inválida! Verifique!</td>
-                            : Array(11).fill(5).map((v, k) => <td key={ k }  onDoubleClick={ () => console.log(hits?.[index]?.[k + v]?.join()?.toString() ?? 'zero') } title={ hits?.[index]?.[k + v]?.join() }>{ hits?.[index]?.[k + v]?.length.toLocaleString('pt-br') ?? '0' }</td>)
+                            : Array(11).fill(5).map((v, k) => (
+                                <OverlayTrigger key={ k } overlay={ <Tooltip>Sorteios: { hits?.[index]?.[k + v]?.join(', ')?.toString() ?? 'zero' }</Tooltip> }>
+                                    <td key={ k } onDoubleClick={ () => console.log(hits?.[index]?.[k + v]?.join()?.toString() ?? 'zero') }>
+                                        { hits?.[index]?.[k + v]?.length.toLocaleString('pt-br') ?? '0' }
+                                    </td>
+                                </OverlayTrigger>
+                            ))
                         }
 
                     </tr>
@@ -110,7 +120,11 @@ export default function Proofing({ data, bets } : ProofingProps) {
             <tfoot>
                 <tr>
                     <th className="bg-dark text-light">TOTAL</th>
-                    { Array(11).fill(5).map((v, k) => <th className="bg-dark text-light" key={ k }>{ reduce(hits, (total, hit) => total + ((hit as Record<number, number[]> | null)?.[k + v]?.length ?? 0) ,0).toLocaleString('pt-br') }</th>) }
+                    { Array(11).fill(5).map((v, k) => (
+                        <th className="bg-dark text-light" key={ k }>
+                            { reduce(hits, (total, hit) => total + ((hit as Record<number, number[]> | null)?.[k + v]?.length ?? 0) ,0).toLocaleString('pt-br') }
+                        </th>
+                    )) }
                 </tr>
             </tfoot>
             
