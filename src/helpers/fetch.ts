@@ -1,5 +1,4 @@
 import reduce from "object-as-array/reduce";
-import { Bet } from "../App";
 
 export type Raffles = Record<number, number[]> | null;
 
@@ -52,7 +51,7 @@ export async function statistic() : Promise<Statistic | null> {
 
 }
 
-export function save(bets : Bet[]) : boolean {
+export function save(bets : number[][]) : boolean {
     try {
         localStorage.setItem('lotofacil_bets', JSON.stringify(bets));
         return true;
@@ -62,12 +61,25 @@ export function save(bets : Bet[]) : boolean {
     }
 }
 
-export function restore() : Bet[] | null {
+export function restore() : number[][] {
     try {
-        const data = localStorage.getItem('lotofacil_bets');
-        return data ? JSON.parse(data) : null;
+
+        const data = JSON.parse(localStorage.getItem('lotofacil_bets') ?? '[]');
+
+        if(
+            !Array.isArray(data) ||
+            data.some(bet => (
+                !Array.isArray(bet) ||
+                bet.some(num => typeof num !== 'number')
+            ))
+        ) throw new Error('The local storage data was invalid!');
+
+        return data;
+
     } catch(error) {
+
         console.error(error);
-        return null;
+        return [];
+
     }
 }

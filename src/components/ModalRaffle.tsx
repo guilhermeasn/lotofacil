@@ -4,6 +4,7 @@ import { Button, FormControl, Modal, Overlay, Tooltip } from "react-bootstrap";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { Raffles } from "../helpers/fetch";
 import Loading from "./Loading";
+import Ticket from "./Ticket";
 
 export type ModalRaffleProps = {
     data : Raffles;
@@ -21,7 +22,7 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
 
     const onSelection = (num : number) : void => {
         if(!data || !max) return;
-        if(isNaN(num)) setSelection(selection ? [ undefined, selection[1] ] : undefined);
+        if(isNaN(num)) setSelection(selection ? [ undefined, [] ] : undefined);
         if(num < 1) num = 1;
         if(num > max) return;
         setSelection([ num, data[num] ]);
@@ -74,29 +75,7 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
 
                 </div>
 
-                { Array(5).fill(5).map((v, k) => (
-
-                    <div key={ k } className="d-flex justify-content-center">
-
-                        { Array(5).fill(k*v+1).map((v, k) => {
-
-                            const num : number = k + v;
-                            const hit : boolean = selection[1]?.some(num2 => num === num2) ?? false;
-
-                            return (
-                                <div
-                                    key={ num }
-                                    className={ "border m-1 p-3 h5 rounded-5" + (hit ? ' bg-success-subtle border-success text-success' : ' text-muted user-select-none') }
-                                >
-                                    { (num < 10 ? '0' : '') + num.toString() }
-                                </div>
-                            );
-
-                        }) }
-
-                    </div>
-
-                )) }
+                <Ticket actives={ selection[1] } />
 
             </Modal.Body>
 

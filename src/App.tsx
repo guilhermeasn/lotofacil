@@ -1,34 +1,14 @@
 import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
 
-import BetInput from "./components/BetInput";
-import BetQuantity from "./components/BetQuantity";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import ModalBet from "./components/ModalBet";
 import ModalRaffle from "./components/ModalRaffle";
 import ModalStatistic from "./components/ModalStatistic";
 import Proofing from "./components/Proofing";
 import Totalization from "./components/Totalization";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
-
-/**
- * ### Dados da Aposta
- * 
- * - **balls**: numeros escolhidos da aposta
- * - **quantity**: quantidade de jogos contidos na mesma aposta
- * - **valid**: aposta valida
- */
-export type Bet = {
-    balls    : number[];
-    quantity : number;
-    valid    : boolean;
-}
-
-const betEmpty : Bet = {
-    balls:    [],
-    quantity: 0,
-    valid:    false
-}
 
 const price : number = 3;
 
@@ -37,52 +17,39 @@ export default function App() {
     const [ data, setData ] = useState<Raffles>(null);
     useEffect(() => { if(!data) raffles().then(setData); }, [ data ]);
 
-    const [ bets, setBets ] = useState<Bet[]>(restore() ?? [ betEmpty ]);
+    const [ bets, setBets ] = useState<number[][]>(restore() ?? []);
     useEffect(() => { save(bets); }, [ bets ]);
 
-    const [ modalRaffle, setModalRaffle ] = useState<boolean>(false);
-    const [ modalStatistic, setModalStatistic ] = useState<boolean>(false);
+    const [ modal, setModal ] = useState<'bet'|'raffle'|'statistic'|null>(null);
 
-    const betQuantity = (value : number) : void => {
-        const newBets : Bet[] = [];
-        for(let c = 0; c < value; c++) newBets.push(bets?.[c] ?? betEmpty);
-        setBets(newBets);
+    const betAdd = (bet : number[]) => {
+        setBets(bets => [ ...bets, bet ]);
     }
 
-    const betUpdate = (index : number, changes : Partial<Bet>) : void => {
-        const newBets : Bet[] = [ ...bets ];
-        newBets[index] = { ...newBets[index], ...changes };
-        setBets(newBets);
+    const betDel = (index : keyof typeof bets) : void => {
+        setBets(bets => bets.filter((_, key) => key !== index));
     }
 
-    const betTotal : number = bets.reduce((p, c) => p + (c.valid ? c.quantity : 0), 0);
+    const betUp = (index : keyof typeof bets, bet : number[]) : void => {
+        setBets(bets => bets.map((old, key) => key === index ? bet : old));
+    }
 
+    // const betTotal : number = bets.reduce((p, c) => p + (c.valid ? c.quantity : 0), 0);
 
     return <>
 
         <Header
-            onRaffle={ () => setModalRaffle(true) }
-            onStatistic={ () => setModalStatistic(true) }
+            onRaffle={ () => setModal('raffle') }
+            onStatistic={ () => setModal('statistic') }
         />
 
         <Container as='main' className="py-3">
 
-            <section>
+            <section className="my-3 text-center">
 
-                <BetQuantity
-                    quantity={ bets.length }
-                    onChange={ betQuantity }
-                />
-                
-                { bets.map((bet, index) => (
-                    <BetInput
-                        index={ index }
-                        key={ index }
-                        price={ price }
-                        bet={ bet }
-                        onChange={ betUpdate }
-                    />
-                )) }
+                <Button variant="outline-success" size="lg" onClick={ () => setModal('bet') }>
+                    Inserir Aposta
+                </Button>
 
             </section>
 
@@ -99,7 +66,7 @@ export default function App() {
 
                 <Totalization
                     price={ price }
-                    quantity={ betTotal }
+                    quantity={ 0 }
                 />
 
             </section>
@@ -108,15 +75,22 @@ export default function App() {
 
         <Footer />
 
+        <ModalBet
+            balls={ [] }
+            show={ modal === 'bet' }
+            onHide={ () => setModal(null) }
+            onSave={ betAdd }
+        />
+
         <ModalRaffle
             data={ data }
-            show={ modalRaffle }
-            onHide={ () => setModalRaffle(false) }
+            show={ modal === 'raffle' }
+            onHide={ () => setModal(null) }
         />
 
         <ModalStatistic
-            show={ modalStatistic }
-            onHide={ () => setModalStatistic(false) }
+            show={ modal === 'statistic' }
+            onHide={ () => setModal(null) }
         />
 
     </>;

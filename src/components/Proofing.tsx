@@ -2,7 +2,6 @@ import reduce from "object-as-array/reduce";
 
 import { useEffect, useState } from "react";
 import { FloatingLabel, Form, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
-import { Bet } from "../App";
 import { Raffles } from "../helpers/fetch";
 import { whoMatches } from "../helpers/math";
 
@@ -10,7 +9,7 @@ import filter from "object-as-array/filter";
 import Loading from "./Loading";
 
 export type ProofingProps = {
-    bets : Bet[];
+    bets : number[][];
     data : Raffles;
 }
 
@@ -42,7 +41,7 @@ export default function Proofing({ data, bets } : ProofingProps) {
     useEffect(() => {
         if(!data) return;
         const dataset = filter(data, (_, k) => k >= selection[1] && k <= selection[2]) as Record<number, number[]>;
-        if(dataset) setHits(bets.map<Record<number, number[]> | null>(bet => bet.valid ? whoMatches(bet.balls, dataset) : null));
+        if(dataset) setHits(bets.map(bet => whoMatches(bet, dataset)));
     }, [bets, data, selection]);
 
     return !data ? <Loading /> : <>
@@ -97,24 +96,29 @@ export default function Proofing({ data, bets } : ProofingProps) {
             </thead>
 
             <tbody>
-                { hits.map((hit, index) => (
+                { hits.length ? hits.map((_, index) => (
                     <tr key={ index }>
                         
-                        <th>#{ index + 1 }</th>
+                        <OverlayTrigger overlay={ <Tooltip>{ bets[index].map(bet => bet < 10 ? `0${bet}` : bet.toString()).join('-') }</Tooltip> }>
+                            <th>#{ index + 1 }</th>
+                        </OverlayTrigger>
 
-                        { hit === null
-                            ? <td className="text-danger" colSpan={ 18 }>Aposta inválida! Verifique!</td>
-                            : Array(11).fill(5).map((v, k) => (
-                                <OverlayTrigger key={ k } overlay={ <Tooltip>Sorteios: { hits?.[index]?.[k + v]?.join(', ')?.toString() ?? 'zero' }</Tooltip> }>
-                                    <td key={ k } onDoubleClick={ () => console.log(hits?.[index]?.[k + v]?.join()?.toString() ?? 'zero') }>
-                                        { hits?.[index]?.[k + v]?.length.toLocaleString('pt-br') ?? '0' }
-                                    </td>
-                                </OverlayTrigger>
-                            ))
-                        }
+                        { Array(11).fill(5).map((v, k) => (
+                            <OverlayTrigger key={ k } overlay={ <Tooltip>Sorteios: { hits?.[index]?.[k + v]?.join(', ')?.toString() ?? 'zero' }</Tooltip> }>
+                                <td key={ k } onDoubleClick={ () => console.log(hits?.[index]?.[k + v]?.join()?.toString() ?? 'zero') }>
+                                    { hits?.[index]?.[k + v]?.length.toLocaleString('pt-br') ?? '0' }
+                                </td>
+                            </OverlayTrigger>
+                        )) }
 
                     </tr>
-                )) }
+                )) : (
+                    <tr>
+                        <td className="text-danger ps-4" colSpan={ 12 }>
+                            Nenhum aposta inserida!
+                        </td>
+                    </tr>
+                ) }
             </tbody>
 
             <tfoot>
