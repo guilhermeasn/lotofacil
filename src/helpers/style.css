@@ -22,4 +22,4 @@ body {
 }
 
 .clickable { cursor: pointer !important; }
-.clickable:hover { filter: brightness(90%); }
+.clickable:hover { filter: brightness(85%); }

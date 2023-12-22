@@ -10,6 +10,7 @@ import Proofing from "./components/Proofing";
 import Totalization from "./components/Totalization";
 
 import Bet from "./components/Bet";
+import ModalDetail from "./components/ModalDetail";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
 
 const price : number = 3;
@@ -22,7 +23,10 @@ export default function App() {
     const [ bets, setBets ] = useState<number[][]>(restore() ?? []);
     useEffect(() => { save(bets); }, [ bets ]);
 
-    const [ modal, setModal ] = useState<'bet' | 'raffle' | 'statistic' | null>(null);
+    const [ modal, setModal ] = useState<'bet' | 'raffle' | 'statistic' | 'detail' | null>(null);
+
+    const [ detail, setDetail ] = useState<number | null>(null);
+    useEffect(() => setModal(detail === null ? null : 'detail') , [ detail ]);
 
     const [ update, setUpdate ] = useState<number | null>(null);
     useEffect(() => setModal(update === null ? null : 'bet'), [ update ]);
@@ -49,6 +53,7 @@ export default function App() {
                         key={ index }
                         index={ index }
                         bet={ bet }
+                        onDetail={ () => setDetail(index) }
                         onUpdate={ () => setUpdate(index) }
                         onDelete={ () => betDel(index) }
                     />
@@ -98,6 +103,13 @@ export default function App() {
         <ModalStatistic
             show={ modal === 'statistic' }
             onHide={ () => setModal(null) }
+        />
+
+        <ModalDetail
+            bet={ detail === null ? undefined : bets[detail] }
+            price={ price }
+            show={ modal === 'detail' }
+            onHide={ () => setDetail(null) }
         />
 
     </>;

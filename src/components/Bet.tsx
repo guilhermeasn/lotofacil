@@ -1,14 +1,15 @@
 import { FormControl, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
+import { FaChartLine, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
 export type BetProps = {
     index : number;
     bet : number[];
+    onDetail : () => void;
     onUpdate : () => void;
     onDelete : () => void;
 }
 
-export default function Bet({ index, bet, onDelete, onUpdate } : BetProps) {
+export default function Bet({ index, bet, onDetail, onDelete, onUpdate } : BetProps) {
 
     const betText : string = bet.map(num => (num < 10 ? '0' : '') + num.toString()).join('-');
 
@@ -27,6 +28,10 @@ export default function Bet({ index, bet, onDelete, onUpdate } : BetProps) {
                     disabled
                 />
             </OverlayTrigger>
+
+            <InputGroup.Text className="bg-info text-dark clickable" onClick={ onDetail }>
+                <FaChartLine />
+            </InputGroup.Text>
 
             <InputGroup.Text className="bg-warning text-dark clickable" onClick={ onUpdate }>
                 <FaPencilAlt />
