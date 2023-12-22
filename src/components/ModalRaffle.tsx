@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { Button, FormControl, Modal, Overlay, Tooltip } from "react-bootstrap";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { Raffles } from "../helpers/fetch";
-import Loading from "./Loading";
 import Ticket from "./Ticket";
 
 export type ModalRaffleProps = {
@@ -40,11 +39,11 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
         setSelection([ max, data[max] ]);
     }, [ data, max, show ]);
 
-    return !selection ? <Loading /> : (
+    return !selection ? <></> : (
 
         <Modal show={ show } onHide={ onHide } centered>
 
-            <Modal.Header className="alert alert-info rounded-bottom-0 user-select-none" closeButton>
+            <Modal.Header className="alert alert-success rounded-bottom-0 user-select-none" closeButton>
                 <Modal.Title>Sorteios</Modal.Title>
             </Modal.Header>
 
@@ -75,7 +74,7 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
 
                 </div>
 
-                <Ticket actives={ selection[1] } />
+                <Ticket variant="success" actives={ selection[1] } />
 
             </Modal.Body>
 

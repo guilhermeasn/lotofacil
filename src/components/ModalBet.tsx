@@ -1,17 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
 import Ticket from "./Ticket";
 
 export type ModalBetProps = {
     show   : boolean
-    balls  : number[];
+    bet    : number[];
     onHide : () => void;
-    onSave : (balls : number[]) => void;
+    onSave : (bet : number[]) => void;
 }
 
-export default function ModalBet({ show, balls, onHide, onSave } : ModalBetProps) {
+export default function ModalBet({ show, bet, onHide, onSave } : ModalBetProps) {
 
-    const [ actives, setActives ] = useState<number[]>(balls);
+    const [ actives, setActives ] = useState<number[]>([]);
+    useEffect(() => setActives(bet), [ show, bet ]);
 
     const onActive = (num : number) : void => setActives(actives => (
         actives.some(active => active === num)
@@ -20,6 +21,12 @@ export default function ModalBet({ show, balls, onHide, onSave } : ModalBetProps
                 ? [ ...actives, num ]
                 : actives
     ));
+
+    const save = () : void => {
+        if(actives.length < 15) return;
+        onSave(actives.sort((a, b) => a - b));
+        onHide();
+    }
 
     return (
 
@@ -52,6 +59,7 @@ export default function ModalBet({ show, balls, onHide, onSave } : ModalBetProps
                 ) }
                 
                 <Ticket
+                    variant="primary"
                     actives={ actives }
                     onClick={ onActive }
                 />
@@ -64,7 +72,7 @@ export default function ModalBet({ show, balls, onHide, onSave } : ModalBetProps
                     Cancelar
                 </Button>
 
-                <Button variant="outline-success" onClick={ () => actives.length < 15 || onSave(actives.sort((a, b) => a - b)) } disabled={ actives.length < 15 }>
+                <Button variant="outline-success" onClick={ save } disabled={ actives.length < 15 }>
                     Salvar
                 </Button>
 

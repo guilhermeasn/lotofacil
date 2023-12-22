@@ -9,6 +9,7 @@ import ModalStatistic from "./components/ModalStatistic";
 import Proofing from "./components/Proofing";
 import Totalization from "./components/Totalization";
 
+import Bet from "./components/Bet";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
 
 const price : number = 3;
@@ -16,12 +17,15 @@ const price : number = 3;
 export default function App() {
 
     const [ data, setData ] = useState<Raffles>(null);
-    useEffect(() => { if(!data) raffles().then(setData); }, [ data ]);
+    useEffect(() => { if(!data) raffles().then(setData); });  // eslint-disable-line react-hooks/exhaustive-deps
 
     const [ bets, setBets ] = useState<number[][]>(restore() ?? []);
     useEffect(() => { save(bets); }, [ bets ]);
 
-    const [ modal, setModal ] = useState<'bet'|'raffle'|'statistic'|null>(null);
+    const [ modal, setModal ] = useState<'bet' | 'raffle' | 'statistic' | null>(null);
+
+    const [ update, setUpdate ] = useState<number | null>(null);
+    useEffect(() => setModal(update === null ? null : 'bet'), [ update ]);
 
     const betAdd = (bet : number[]) => setBets(bets => [ ...bets, bet ]);
     const betDel = (index : number) => setBets(bets => bets.filter((_, key) => key !== index));
@@ -40,7 +44,17 @@ export default function App() {
 
             <section className="my-3 text-center">
 
-                <Button variant="outline-success" size="lg" onClick={ () => setModal('bet') }>
+                { bets.map((bet, index) => (
+                    <Bet
+                        key={ index }
+                        index={ index }
+                        bet={ bet }
+                        onUpdate={ () => setUpdate(index) }
+                        onDelete={ () => betDel(index) }
+                    />
+                )) }
+
+                <Button variant="primary" size="lg" onClick={ () => setModal('bet') }>
                     Inserir Aposta
                 </Button>
 
@@ -69,10 +83,10 @@ export default function App() {
         <Footer />
 
         <ModalBet
-            balls={ [] }
+            bet={ update === null ? [] : bets[update] }
             show={ modal === 'bet' }
-            onHide={ () => setModal(null) }
-            onSave={ betAdd }
+            onHide={ update === null ? () => setModal(null) : () => setUpdate(null) }
+            onSave={ update === null ? betAdd : bet => betUpdate(update, bet) }
         />
 
         <ModalRaffle

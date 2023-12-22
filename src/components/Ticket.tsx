@@ -1,9 +1,10 @@
 export type TicketProps = {
+    variant ?: 'success' | 'primary' | 'danger' | 'warning';
     actives ?: number[];
     onClick ?: (num : number) => void;
 }
 
-export default function Ticket({ actives, onClick } : TicketProps) {
+export default function Ticket({ variant = 'success', actives, onClick } : TicketProps) {
 
     return (
 
@@ -23,7 +24,7 @@ export default function Ticket({ actives, onClick } : TicketProps) {
                                 key={ num }
                                 className={ [
                                     "border m-1 p-3 h5 rounded-5",
-                                    hit ? 'bg-success-subtle border-success text-success' : 'text-muted user-select-none',
+                                    hit ? `bg-${variant}-subtle border-${variant} text-${variant}` : 'text-muted user-select-none',
                                     typeof onClick === 'function' ? 'clickable' : ''
                                 ].join(' ') }
                                 onClick={ typeof onClick === 'function' ? () => onClick(num) : undefined }
