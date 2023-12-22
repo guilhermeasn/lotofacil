@@ -47,7 +47,7 @@ export default function ModalBet({ show, bet, onHide, onSave } : ModalBetProps) 
                 ) : (
 
                     <Alert className="text-center" variant="success">
-                        { actives.length } números foram escolhidos
+                        { actives.length } números escolhidos
                     </Alert>
 
                 )) : (
