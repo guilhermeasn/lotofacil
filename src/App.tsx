@@ -12,6 +12,7 @@ import Totalization from "./components/Totalization";
 import Bet from "./components/Bet";
 import ModalDetail from "./components/ModalDetail";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
+import { betQuantity } from "./helpers/math";
 
 const price : number = 3;
 
@@ -34,8 +35,6 @@ export default function App() {
     const betAdd = (bet : number[]) => setBets(bets => [ ...bets, bet ]);
     const betDel = (index : number) => setBets(bets => bets.filter((_, key) => key !== index));
     const betUpdate = (index : number, bet : number[]) => setBets(bets => bets.map((old, key) => key === index ? bet : old));
-
-    // const betTotal : number = bets.reduce((p, c) => p + (c.valid ? c.quantity : 0), 0);
 
     return <>
 
@@ -78,7 +77,7 @@ export default function App() {
 
                 <Totalization
                     price={ price }
-                    quantity={ 0 }
+                    quantity={ bets.reduce((total, bet) => total + betQuantity(bet.length), 0) }
                 />
 
             </section>

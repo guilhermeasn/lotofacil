@@ -23,3 +23,5 @@ body {
 
 .clickable { cursor: pointer !important; }
 .clickable:hover { filter: brightness(85%); }
+
+a { text-decoration: none; }
