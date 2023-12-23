@@ -1,3 +1,4 @@
+import download from 'downloadjs';
 import { useEffect, useState } from "react";
 import { Alert, Button, Col, Container, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
@@ -78,18 +79,22 @@ export default function App() {
 
                 </Row>
 
-                <Button variant="primary" className="m-1" size="lg" onClick={ () => setModal('bet') }>
+                <Button variant="primary" className="m-1 btn-size-1" onClick={ () => setModal('bet') }>
                     Inserir Aposta
                 </Button>
 
-                <Button variant="success" className="m-1" size="lg" onClick={ () => betAdd(surprise(15, 25)) }>
+                <Button variant="success" className="m-1 btn-size-1" onClick={ () => betAdd(surprise(15, 25)) }>
                     Gerar Aposta
+                </Button>
+
+                <Button variant="warning" className="m-1 btn-size-1" disabled={ bets.length === 0 } onClick={ () => download(new Blob(bets.map(bet => bet.map(num => (num < 10 ? '0' : '') + num).join('-') + '\n')), 'lotofacil-bets.txt', 'text/plain') }>
+                    Download
                 </Button>
 
                 { bets.length > 9 && (
                     <p>
                         <OverlayTrigger placement="bottom" overlay={ <Tooltip>Duplo click para deletar todas as apostas</Tooltip> }>
-                            <Button variant="outline-danger" className="m-1" size="lg" onDoubleClick={ () => setBets([]) }>
+                            <Button variant="outline-danger" className="m-1 btn-size-1" onDoubleClick={ () => setBets([]) }>
                                 Deletar Apostas
                             </Button>
                         </OverlayTrigger>

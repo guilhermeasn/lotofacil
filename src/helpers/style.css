@@ -46,3 +46,7 @@ body {
 .clickable:hover { filter: brightness(85%); }
 
 a { text-decoration: none; }
+
+.btn-size-1 {
+    width: 200px !important;
+}
