@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Button, Container } from "react-bootstrap";
+import { Alert, Button, Col, Container, Row } from "react-bootstrap";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
 import { betQuantity, replicates, surprise } from "./helpers/math";
 
@@ -61,17 +61,22 @@ export default function App() {
                     </Alert>
                 ) }
 
-                { bets.map((bet, index) => (
-                    <Bet
-                        key={ index }
-                        index={ index }
-                        bet={ bet }
-                        warn={ duplicates.some(num => num === index) }
-                        onDetail={ () => setDetail(index) }
-                        onUpdate={ () => setUpdate(index) }
-                        onDelete={ () => betDel(index) }
-                    />
-                )) }
+                <Row className="mb-3">
+
+                    { bets.map((bet, index) => (
+                        <Col key={ index } xs={ 12 } xl={ bets.length > 99 ? 3 : (bets.length > 9 ? 6 : 12) } >
+                            <Bet
+                                cod={ (index + 1).toString() }
+                                bet={ bet }
+                                warn={ duplicates.some(num => num === index) }
+                                onDetail={ () => setDetail(index) }
+                                onUpdate={ () => setUpdate(index) }
+                                onDelete={ () => betDel(index) }
+                            />
+                        </Col>
+                    )) }
+
+                </Row>
 
                 <Button variant="primary" className="m-1" size="lg" onClick={ () => setModal('bet') }>
                     Inserir Aposta
@@ -80,6 +85,12 @@ export default function App() {
                 <Button variant="success" className="m-1" size="lg" onClick={ () => betAdd(surprise(15, 25)) }>
                     Gerar Aposta
                 </Button>
+
+                { bets.length > 30 && (
+                    <p><Button variant="outline-danger" className="m-1" size="lg" onDoubleClick={ () => setBets([]) }>
+                        Deletar Apostas
+                    </Button></p>
+                ) }
 
             </section>
 

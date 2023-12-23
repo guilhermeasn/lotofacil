@@ -2,24 +2,24 @@ import { FormControl, InputGroup, OverlayTrigger, Tooltip } from "react-bootstra
 import { FaChartLine, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
 export type BetProps = {
-    index : number;
-    bet   : number[];
-    warn ?: boolean;
+    cod      : string;
+    bet      : number[];
+    warn    ?: boolean;
     onDetail : () => void;
     onUpdate : () => void;
     onDelete : () => void;
 }
 
-export default function Bet({ index, bet, warn = false, onDetail, onDelete, onUpdate } : BetProps) {
+export default function Bet({ cod, bet, warn = false, onDetail, onDelete, onUpdate } : BetProps) {
 
     const betText : string = bet.map(num => (num < 10 ? '0' : '') + num.toString()).join('-');
 
     return (
 
-        <InputGroup className="my-3">
+        <InputGroup className="my-1">
     
             <InputGroup.Text className="bg-dark text-light">
-                { index + 1 }
+                { cod }
             </InputGroup.Text>
 
             <OverlayTrigger placement="bottom" overlay={ <Tooltip>{ betText }</Tooltip> }>
@@ -39,9 +39,11 @@ export default function Bet({ index, bet, warn = false, onDetail, onDelete, onUp
                 <FaPencilAlt />
             </InputGroup.Text>
 
-            <InputGroup.Text className="bg-danger text-light clickable" onClick={ onDelete }>
-                <FaTrashAlt />
-            </InputGroup.Text>
+            <OverlayTrigger placement="bottom" overlay={ <Tooltip className="bg-danger">Duplo click para deletar</Tooltip> }>
+                <InputGroup.Text className="bg-danger text-light clickable" onDoubleClick={ onDelete }>
+                    <FaTrashAlt />
+                </InputGroup.Text>
+            </OverlayTrigger>
 
         </InputGroup>
 
