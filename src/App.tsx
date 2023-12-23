@@ -49,6 +49,12 @@ export default function App() {
 
             <section className="my-3 text-center">
 
+                { !bets.length && (
+                    <Alert variant="warning" className="text-start">
+                        Nenhuma aposta salva!
+                    </Alert>
+                ) }
+
                 { duplicates.length > 0 && (
                     <Alert variant="danger" className="text-start">
                         Foram encontradas apostas repetidas!
