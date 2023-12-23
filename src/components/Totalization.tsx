@@ -33,8 +33,8 @@ export default function Totalization({ quantity, price } : TotalizationProps) {
 
                 <Col key={ title } s={ 12 } md={ 6 } lg={ 4 }>
                     <Card className='my-3 text-center'>
-                        <Card.Header className='alert alert-secondary m-0 h5'>{ title }</Card.Header>
-                        <Card.Body className='fw-bold'>{ value.join(' ') }</Card.Body>
+                        <Card.Header className='alert alert-info m-0 h5'>{ title }</Card.Header>
+                        <Card.Body className='alert alert-secondary rounded-0 m-0'>{ value.join(' ') }</Card.Body>
                     </Card>
                 </Col>
 

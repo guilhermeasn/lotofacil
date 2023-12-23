@@ -82,7 +82,7 @@ export default function Proofing({ data, bets } : ProofingProps) {
 
         </div>
 
-        <Table variant="info" striped hover responsive>
+        <Table variant="secondary" striped hover responsive>
 
             <thead>
                 <tr className="text-center">
