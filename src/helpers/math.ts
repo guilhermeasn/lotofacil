@@ -120,3 +120,33 @@ function isPrime(num : number) : boolean {
 export function primes(bet : number[]) : number {
     return bet.reduce((total, num) => isPrime(num) ? total + 1 : total, 0);
 }
+
+export function replicates(bets : number[][]) : number[] {
+    return bets.reduce((res, bet, index) => (
+        bets.filter(bet2 => (
+            bet.every(num => bet2.some(num2 => num === num2))
+        )).length > 1 ? [ ...res, index ] : res
+    ), []);
+}
+
+export function randomInt(min : number, max : number) : number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function surprise(amount : number = 15, overall : number = 25) : number[] {
+
+    if(amount > overall) throw new Error('amount cannot be greater than overall');
+
+    const result : number[] = [];
+
+    while(result.length < amount) {
+        const random : number = randomInt(1, overall);
+        if(result.some(num => num === random)) continue;
+        result.push(random);
+    }
+
+    return result.sort((a, b) => a - b);
+
+}

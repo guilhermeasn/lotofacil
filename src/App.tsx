@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Alert, Button, Container } from "react-bootstrap";
+import { Raffles, raffles, restore, save } from "./helpers/fetch";
+import { betQuantity, replicates, surprise } from "./helpers/math";
 
+import Bet from "./components/Bet";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import ModalBet from "./components/ModalBet";
+import ModalDetail from "./components/ModalDetail";
 import ModalRaffle from "./components/ModalRaffle";
 import ModalStatistic from "./components/ModalStatistic";
 import Proofing from "./components/Proofing";
 import Totalization from "./components/Totalization";
-
-import Bet from "./components/Bet";
-import ModalDetail from "./components/ModalDetail";
-import { Raffles, raffles, restore, save } from "./helpers/fetch";
-import { betQuantity } from "./helpers/math";
 
 const price : number = 3;
 
@@ -32,6 +31,9 @@ export default function App() {
     const [ update, setUpdate ] = useState<number | null>(null);
     useEffect(() => setModal(update === null ? null : 'bet'), [ update ]);
 
+    const [ duplicates, setDuplicates ] = useState<number[]>([]);
+    useEffect(() => setDuplicates(replicates(bets)), [ bets ]);
+
     const betAdd = (bet : number[]) => setBets(bets => [ ...bets, bet ]);
     const betDel = (index : number) => setBets(bets => bets.filter((_, key) => key !== index));
     const betUpdate = (index : number, bet : number[]) => setBets(bets => bets.map((old, key) => key === index ? bet : old));
@@ -47,19 +49,30 @@ export default function App() {
 
             <section className="my-3 text-center">
 
+                { duplicates.length > 0 && (
+                    <Alert variant="danger" className="text-start">
+                        Foram encontradas apostas repetidas!
+                    </Alert>
+                ) }
+
                 { bets.map((bet, index) => (
                     <Bet
                         key={ index }
                         index={ index }
                         bet={ bet }
+                        warn={ duplicates.some(num => num === index) }
                         onDetail={ () => setDetail(index) }
                         onUpdate={ () => setUpdate(index) }
                         onDelete={ () => betDel(index) }
                     />
                 )) }
 
-                <Button variant="primary" size="lg" onClick={ () => setModal('bet') }>
+                <Button variant="primary" className="m-1" size="lg" onClick={ () => setModal('bet') }>
                     Inserir Aposta
+                </Button>
+
+                <Button variant="success" className="m-1" size="lg" onClick={ () => betAdd(surprise(15, 25)) }>
+                    Gerar Aposta
                 </Button>
 
             </section>

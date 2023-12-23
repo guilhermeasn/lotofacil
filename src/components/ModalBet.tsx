@@ -102,13 +102,12 @@ export default function ModalBet({ show, bet, onHide, onSave } : ModalBetProps) 
 
                 <div className="p-3">
                     <FormControl
+                        placeholder="Nenhum número selecionado!"
                         className={
                             valid === null
-                                ? undefined
-                                : (valid
-                                        ? 'bg-success-subtle border-success text-success'
-                                        : 'bg-danger-subtle border-danger text-danger'
-                                    )
+                                ? 'input-warn'
+                                : (valid ? 'input-success' : 'input-error')
+                                    
                         }
                         onChange={ input => setValue(mask(input.currentTarget.value).replace(/-$/, '')) }
                         value={ value }

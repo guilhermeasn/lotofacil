@@ -3,13 +3,14 @@ import { FaChartLine, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
 export type BetProps = {
     index : number;
-    bet : number[];
+    bet   : number[];
+    warn ?: boolean;
     onDetail : () => void;
     onUpdate : () => void;
     onDelete : () => void;
 }
 
-export default function Bet({ index, bet, onDetail, onDelete, onUpdate } : BetProps) {
+export default function Bet({ index, bet, warn = false, onDetail, onDelete, onUpdate } : BetProps) {
 
     const betText : string = bet.map(num => (num < 10 ? '0' : '') + num.toString()).join('-');
 
@@ -23,6 +24,7 @@ export default function Bet({ index, bet, onDetail, onDelete, onUpdate } : BetPr
 
             <OverlayTrigger placement="bottom" overlay={ <Tooltip>{ betText }</Tooltip> }>
                 <FormControl
+                    className={ warn ? "input-warn" : undefined }
                     value={ betText }
                     onChange={ undefined }
                     disabled
