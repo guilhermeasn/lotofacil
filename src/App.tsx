@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Button, Col, Container, Row } from "react-bootstrap";
+import { Alert, Button, Col, Container, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
 import { betQuantity, replicates, surprise } from "./helpers/math";
 
@@ -86,10 +86,14 @@ export default function App() {
                     Gerar Aposta
                 </Button>
 
-                { bets.length > 30 && (
-                    <p><Button variant="outline-danger" className="m-1" size="lg" onDoubleClick={ () => setBets([]) }>
-                        Deletar Apostas
-                    </Button></p>
+                { bets.length > 9 && (
+                    <p>
+                        <OverlayTrigger placement="bottom" overlay={ <Tooltip>Duplo click para deletar todas as apostas</Tooltip> }>
+                            <Button variant="outline-danger" className="m-1" size="lg" onDoubleClick={ () => setBets([]) }>
+                                Deletar Apostas
+                            </Button>
+                        </OverlayTrigger>
+                    </p>
                 ) }
 
             </section>
