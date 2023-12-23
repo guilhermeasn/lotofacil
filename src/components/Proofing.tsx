@@ -99,7 +99,7 @@ export default function Proofing({ data, bets } : ProofingProps) {
                 { hits.length ? hits.map((_, index) => (
                     <tr key={ index }>
                         
-                        <OverlayTrigger overlay={ <Tooltip>{ bets[index]?.map(bet => bet < 10 ? `0${bet}` : bet.toString()).join('-') }</Tooltip> }>
+                        <OverlayTrigger overlay={ <Tooltip>{bets[index]?.length ?? 0} números: { bets[index]?.map(bet => bet < 10 ? `0${bet}` : bet.toString()).join('-') }</Tooltip> }>
                             <th>#{ index + 1 }</th>
                         </OverlayTrigger>
 

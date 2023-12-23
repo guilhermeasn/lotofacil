@@ -22,7 +22,7 @@ export default function Bet({ cod, bet, warn = false, onDetail, onDelete, onUpda
                 { cod }
             </InputGroup.Text>
 
-            <OverlayTrigger placement="bottom" overlay={ <Tooltip>{ betText }</Tooltip> }>
+            <OverlayTrigger placement="bottom" overlay={ <Tooltip>{ `${bet.length} números: ${betText}` }</Tooltip> }>
                 <FormControl
                     className={ warn ? "input-warn" : undefined }
                     value={ betText }
