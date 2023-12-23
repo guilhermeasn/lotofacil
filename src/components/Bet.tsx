@@ -39,7 +39,7 @@ export default function Bet({ cod, bet, warn = false, onDetail, onDelete, onUpda
                 <FaPencilAlt />
             </InputGroup.Text>
 
-            <OverlayTrigger placement="bottom" overlay={ <Tooltip className="bg-danger">Duplo click para deletar</Tooltip> }>
+            <OverlayTrigger placement="bottom" overlay={ <Tooltip>Duplo click para deletar</Tooltip> }>
                 <InputGroup.Text className="bg-danger text-light clickable" onDoubleClick={ onDelete }>
                     <FaTrashAlt />
                 </InputGroup.Text>
