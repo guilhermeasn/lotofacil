@@ -76,8 +76,8 @@ function combine(
     combination : number[] = []
 ) {
 
-    if (combination.length === amount) {
-        onResult(combination);
+    if(combination.length === amount) {
+        onResult([...combination]);
         return;
     }
 
@@ -89,7 +89,7 @@ function combine(
 
 }
 
-export function smartBets(amount : number) : number[][] {
+export function smartBets(amount : number, raffles : number[][], score : number[], limit : number) : number[][] {
     
     let bets : number[][] = [];
 
