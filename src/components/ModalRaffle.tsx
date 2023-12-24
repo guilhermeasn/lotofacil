@@ -43,7 +43,7 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
 
         <Modal show={ show } onHide={ onHide } centered>
 
-            <Modal.Header className="alert alert-success rounded-bottom-0 user-select-none" closeButton>
+            <Modal.Header className="alert alert-info rounded-bottom-0 user-select-none" closeButton>
                 <Modal.Title>Sorteios</Modal.Title>
             </Modal.Header>
 

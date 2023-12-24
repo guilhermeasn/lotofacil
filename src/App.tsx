@@ -2,13 +2,14 @@ import download from 'downloadjs';
 import { useEffect, useState } from "react";
 import { Alert, Button, Col, Container, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
-import { betQuantity, replicates, surprise } from "./helpers/math";
+import { betQuantity, replicates } from "./helpers/math";
 
 import Bet from "./components/Bet";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import ModalBet from "./components/ModalBet";
 import ModalDetail from "./components/ModalDetail";
+import ModalGenerator from './components/ModalGenerator';
 import ModalRaffle from "./components/ModalRaffle";
 import ModalStatistic from "./components/ModalStatistic";
 import Proofing from "./components/Proofing";
@@ -24,7 +25,7 @@ export default function App() {
     const [ bets, setBets ] = useState<number[][]>(restore() ?? []);
     useEffect(() => { save(bets); }, [ bets ]);
 
-    const [ modal, setModal ] = useState<'bet' | 'raffle' | 'statistic' | 'detail' | null>(null);
+    const [ modal, setModal ] = useState<'bet' | 'raffle' | 'statistic' | 'detail' | 'generator' | null>(null);
 
     const [ detail, setDetail ] = useState<number | null>(null);
     useEffect(() => setModal(detail === null ? null : 'detail') , [ detail ]);
@@ -35,7 +36,7 @@ export default function App() {
     const [ duplicates, setDuplicates ] = useState<number[]>([]);
     useEffect(() => setDuplicates(replicates(bets)), [ bets ]);
 
-    const betAdd = (bet : number[]) => setBets(bets => [ ...bets, bet ]);
+    const betAdd = (...bets : number[][]) => setBets(old => [ ...old, ...bets ]);
     const betDel = (index : number) => setBets(bets => bets.filter((_, key) => key !== index));
     const betUpdate = (index : number, bet : number[]) => setBets(bets => bets.map((old, key) => key === index ? bet : old));
 
@@ -83,7 +84,7 @@ export default function App() {
                     Inserir Aposta
                 </Button>
 
-                <Button variant="success" className="m-1 btn-size-1" onClick={ () => betAdd(surprise(15, 25)) }>
+                <Button variant="success" className="m-1 btn-size-1" onClick={ () => setModal('generator') }>
                     Gerar Aposta
                 </Button>
 
@@ -148,6 +149,12 @@ export default function App() {
             price={ price }
             show={ modal === 'detail' }
             onHide={ () => setDetail(null) }
+        />
+
+        <ModalGenerator
+            show={ modal === 'generator' }
+            onHide={ () => setModal(null) }
+            onMake={ bets => betAdd(...bets) }
         />
 
     </>;
