@@ -6,12 +6,13 @@ import { Raffles } from "../helpers/fetch";
 import Ticket from "./Ticket";
 
 export type ModalRaffleProps = {
-    data : Raffles;
-    show : boolean;
-    onHide :  () => void;
+    data     : Raffles;
+    show     : boolean;
+    onHide   : () => void;
+    onDetail : (bet : number[]) => void;
 }
 
-export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
+export default function ModalRaffle({ data, show, onHide, onDetail } : ModalRaffleProps) {
 
     const max : number | undefined = data ? parseInt(Object.keys(data)[Object.keys(data).length-1]) : undefined;
 
@@ -43,7 +44,7 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
 
         <Modal show={ show } onHide={ onHide } centered>
 
-            <Modal.Header className="alert alert-success rounded-bottom-0 user-select-none" closeButton>
+            <Modal.Header className="alert alert-info rounded-bottom-0 user-select-none" closeButton>
                 <Modal.Title>Sorteios</Modal.Title>
             </Modal.Header>
 
@@ -82,6 +83,10 @@ export default function ModalRaffle({ data, show, onHide } : ModalRaffleProps) {
 
                 <Button variant="secondary" onClick={ onHide }>
                     Fechar
+                </Button>
+
+                <Button variant="outline-warning" onClick={ Array.isArray(selection[1]) ? () => onDetail(selection[1]) : undefined } disabled={ selection[1] === undefined }>
+                    Detalhar
                 </Button>
 
                 <Button ref={ buttonCopy } variant="outline-success" onClick={ onCopy }>
