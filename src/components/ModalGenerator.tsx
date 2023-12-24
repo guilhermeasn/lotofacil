@@ -74,7 +74,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
                         />
                     </Tab>
 
-                    <Tab className="p-4" eventKey="smart" title="Inteligente" disabled>
+                    <Tab className="p-4" eventKey="smart" title="Inteligente">
 
                         <FormGroup>
 
@@ -99,23 +99,35 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 
                             <FormLabel>Dos sorteios:</FormLabel>
 
-                            <FormSelect>
-                                <option value="30">últimos trinta sorteios</option>
-                                <option value="24">últimos vinte e quatro sorteios</option>
-                                <option value="18">últimos dezoito sorteios</option>
-                                <option value="12">últimos doze sorteios</option>
-                                <option value="6">últimos seis sorteios</option>
-                                <option value="3">últimos três sorteios</option>
-                                <option value="1">último sorteio</option>
-                                <option value="0">todos os sorteios (PROCESSO DEMORADO)</option>
-                            </FormSelect>
+                            <Select />
 
                         </FormGroup>
 
                     </Tab>
 
-                    <Tab className="p-4" eventKey="statistic" title="Estatístico" disabled>
-                        estatistico
+                    <Tab className="p-4" eventKey="statistic" title="Estatístico">
+
+                        <FormGroup className="mt-3">
+
+                            <FormLabel>Estratégia:</FormLabel>
+
+                            <FormSelect>
+                                <option>Números que mais saíram</option>
+                                <option>Números que menos saíram</option>
+                                <option>Números mais atrasados</option>
+                                <option>Todas as opções</option>
+                            </FormSelect>
+
+                        </FormGroup>
+
+                        <FormGroup className="mt-3">
+
+                            <FormLabel>Dos sorteios:</FormLabel>
+
+                            <Select />
+
+                        </FormGroup>
+
                     </Tab>
 
                 </Tabs>
@@ -138,4 +150,19 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 
     );
 
+}
+
+function Select() {
+    return (
+        <FormSelect>
+            <option value="30">últimos trinta sorteios</option>
+            <option value="24">últimos vinte e quatro sorteios</option>
+            <option value="18">últimos dezoito sorteios</option>
+            <option value="12">últimos doze sorteios</option>
+            <option value="6">últimos seis sorteios</option>
+            <option value="3">últimos três sorteios</option>
+            <option value="1">último sorteio</option>
+            <option value="0">todos os sorteios</option>
+        </FormSelect>
+    )
 }
