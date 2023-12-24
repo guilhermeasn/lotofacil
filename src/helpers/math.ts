@@ -68,35 +68,54 @@ export function whoMatches(bet : number[], raffles : Record<number, number[]>) :
 
 }
 
-export function numberOfCombination(sequence : number[], overall : number = 25) : number {
+function combine(
+    amount      : number,
+    overall     : number,
+    onResult    : (combination : number[]) => void, 
+    start       : number = 1,
+    combination : number[] = []
+) {
 
-    let count : number = 0;
-    let result : number = 0;
+    if (combination.length === amount) {
+        onResult(combination);
+        return;
+    }
 
-    function combine(start : number = 1, combination : number[] = []) {
+    for (let i = start; i <= overall; i++) {
+        combination.push(i);
+        combine(amount, overall, onResult, i + 1, combination);
+        combination.pop();
+    }
 
-        if (combination.length === sequence.length) {
+}
+
+export function smartBets(amount : number) : number[][] {
+    
+    let bets : number[][] = [];
+
+
+
+    return bets;
+    
+}
+
+export async function numberOfCombination(sequence : number[]) : Promise<number> {
+
+    return new Promise(resolve => setTimeout(() => {
+
+        let count : number = 0;
+        let result : number = 0;
+
+        combine(sequence.length, 25, combination => {
             ++count;
-
             if(combination.every(n => sequence.some(s => s === n))) {
                 result = count;
             }
+        });
 
-            return;
-        }
+        resolve(result);
 
-        for (let i = start; i <= overall; i++) {
-            combination.push(i);
-            if(result > 0) return;
-            combine(i + 1, combination);
-            combination.pop();
-        }
-
-    }
-
-    combine();
-
-    return result;
+    }));
 
 }
 

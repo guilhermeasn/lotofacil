@@ -12,7 +12,7 @@ export type ModalGeneratorProps = {
 export default function ModalGenerator({ show, onHide, onMake } : ModalGeneratorProps) {
 
     const [ balls, setBalls ] = useState<number>(15);
-    const [ tab, setTab ] = useState<'random' | 'smart'>('random');
+    const [ tab, setTab ] = useState<string>('random');
     const [ wait, setWait ] = useState<boolean>(false);
 
     const [ randoms, setRandoms ] = useState<number>(1);
@@ -29,8 +29,11 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
             while(bets.length < randoms) bets.push(surprise(balls, 25));
 
             onMake(bets);
-            onHide();
-            setWait(false);
+
+            setTimeout(() => {
+                onHide();
+                setWait(false);
+            }, 1000);
             
         }, 1000);
 
@@ -59,9 +62,9 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
                     onChange={ setBalls }
                 />
 
-                <Tabs activeKey={ tab } onSelect={ key => key === 'random' || key === 'smart' ? setTab(key) : null }>
+                <Tabs activeKey={ tab } onSelect={ key => key === null ? undefined : setTab(key) }>
 
-                    <Tab className="p-4" eventKey="random" title="Modo Aleatório">
+                    <Tab className="p-4" eventKey="random" title="Aleatório">
                         <Range
                             label="Quantidade de Apostas"
                             min={ 1 }
@@ -71,7 +74,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
                         />
                     </Tab>
 
-                    <Tab className="p-4" eventKey="smart" title="Modo Inteligente">
+                    <Tab className="p-4" eventKey="smart" title="Inteligente" disabled>
 
                         <FormGroup>
 
@@ -109,6 +112,10 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 
                         </FormGroup>
 
+                    </Tab>
+
+                    <Tab className="p-4" eventKey="statistic" title="Estatístico" disabled>
+                        estatistico
                     </Tab>
 
                 </Tabs>

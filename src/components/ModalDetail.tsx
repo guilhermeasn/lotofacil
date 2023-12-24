@@ -1,6 +1,8 @@
 import map from "object-as-array/map";
+import { useEffect, useState } from "react";
 import { Button, ListGroup, Modal } from "react-bootstrap";
 import { betQuantity, mean, numberOfCombination, pairs, primes, sum } from "../helpers/math";
+import Loading from "./Loading";
 
 export type ModalDetailProps = {
     bet ?: number[];
@@ -33,16 +35,26 @@ const description : Record<keyof Analytic, string> = {
 
 export default function ModalDetail({ bet, price, show, onHide } : ModalDetailProps) {
 
-    const analytic : Analytic | null = bet ? {
-        length   : bet.length,
-        quantity : betQuantity(bet.length),
-        price    : betQuantity(bet.length) * price,
-        relative : numberOfCombination(bet, 25),
-        sum      : sum(bet),
-        mean     : mean(bet),
-        pairs    : pairs(bet),
-        primes   : primes(bet)
-    } : null;
+    const [ analytic, setAnalytic ] = useState<Analytic | null>();
+
+    useEffect(() => {
+
+        setAnalytic(null);
+
+        if(show && bet) numberOfCombination(bet).then(relative => {
+            setAnalytic({
+                length   : bet.length,
+                quantity : betQuantity(bet.length),
+                price    : betQuantity(bet.length) * price,
+                relative : relative,
+                sum      : sum(bet),
+                mean     : mean(bet),
+                pairs    : pairs(bet),
+                primes   : primes(bet)
+            })
+        });
+
+    }, [bet, price, show]);
 
     return (
         <Modal show={ show } onHide={ onHide } centered>
@@ -52,7 +64,7 @@ export default function ModalDetail({ bet, price, show, onHide } : ModalDetailPr
             </Modal.Header>
 
             <Modal.Body>
-                { bet && (
+                { analytic && bet ? (
 
                     <ListGroup variant="flush">
 
@@ -62,7 +74,7 @@ export default function ModalDetail({ bet, price, show, onHide } : ModalDetailPr
                             </strong>
                         </ListGroup.Item>
 
-                        { analytic && map(analytic, (num, key) => (
+                        { map(analytic, (num, key) => (
 
                             <ListGroup.Item className="d-flex px-4 justify-content-between" key={ key }>
                                 <span>{ description[key] }:&nbsp;</span>
@@ -73,7 +85,7 @@ export default function ModalDetail({ bet, price, show, onHide } : ModalDetailPr
 
                     </ListGroup>
 
-                ) }
+                ) : <Loading /> }
             </Modal.Body>
 
             <Modal.Footer>

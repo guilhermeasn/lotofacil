@@ -1,4 +1,5 @@
 import download from 'downloadjs';
+
 import { useEffect, useState } from "react";
 import { Alert, Button, Col, Container, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
@@ -27,7 +28,7 @@ export default function App() {
 
     const [ modal, setModal ] = useState<'bet' | 'raffle' | 'statistic' | 'detail' | 'generator' | null>(null);
 
-    const [ detail, setDetail ] = useState<number | null>(null);
+    const [ detail, setDetail ] = useState<number[] | null>(null);
     useEffect(() => setModal(detail === null ? null : 'detail') , [ detail ]);
 
     const [ update, setUpdate ] = useState<number | null>(null);
@@ -71,7 +72,7 @@ export default function App() {
                                 cod={ (index + 1).toString() }
                                 bet={ bet }
                                 warn={ duplicates.some(num => num === index) }
-                                onDetail={ () => setDetail(index) }
+                                onDetail={ () => setDetail(bet) }
                                 onUpdate={ () => setUpdate(index) }
                                 onDelete={ () => betDel(index) }
                             />
@@ -137,6 +138,7 @@ export default function App() {
             data={ data }
             show={ modal === 'raffle' }
             onHide={ () => setModal(null) }
+            onDetail={ setDetail }
         />
 
         <ModalStatistic
@@ -145,7 +147,7 @@ export default function App() {
         />
 
         <ModalDetail
-            bet={ detail === null ? undefined : bets[detail] }
+            bet={ detail === null ? undefined : detail }
             price={ price }
             show={ modal === 'detail' }
             onHide={ () => setDetail(null) }
