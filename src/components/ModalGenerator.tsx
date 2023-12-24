@@ -15,7 +15,8 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
     const [ tab, setTab ] = useState<string>('random');
     const [ wait, setWait ] = useState<boolean>(false);
 
-    const [ randoms, setRandoms ] = useState<number>(1);
+    const [ randoms, setRandoms ] = useState<number>(10);
+    const [ smarts, setSmarts ] = useState<number>(10);
 
     const [ hits, setHits ] = useState<number[]>([ 13, 14 ]);
 
@@ -48,7 +49,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
         <Modal show={ show } onHide={ wait ? undefined : onHide }>
 
             <Modal.Header className="alert alert-success rounded-bottom-0 user-select-none" closeButton={ !wait }>
-                <Modal.Title>Gerador</Modal.Title>
+                <Modal.Title>Gerador de Apostas</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
@@ -66,7 +67,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 
                     <Tab className="p-4" eventKey="random" title="Aleatório">
                         <Range
-                            label="Quantidade de Apostas"
+                            label="Quantidade de Apostas Aleatórias"
                             min={ 1 }
                             max={ 100 }
                             num={ randoms }
@@ -76,7 +77,15 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 
                     <Tab className="p-4" eventKey="smart" title="Inteligente">
 
-                        <FormGroup>
+                        <Range
+                            label="Quantidade Máxima de Apostas"
+                            min={ 1 }
+                            max={ 100 }
+                            num={ smarts }
+                            onChange={ setSmarts }
+                        />
+
+                        <FormGroup className="my-3">
 
                             <FormLabel>Obteve mais acertos com:</FormLabel>
 
@@ -95,7 +104,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 
                         </FormGroup>
 
-                        <FormGroup className="mt-3">
+                        <FormGroup>
 
                             <FormLabel>Dos sorteios:</FormLabel>
 

@@ -45,7 +45,7 @@ export default function ModalRaffle({ data, show, onHide, onDetail } : ModalRaff
         <Modal show={ show } onHide={ onHide } centered>
 
             <Modal.Header className="alert alert-info rounded-bottom-0 user-select-none" closeButton>
-                <Modal.Title>Sorteios</Modal.Title>
+                <Modal.Title>Sorteios Realizados</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
