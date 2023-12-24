@@ -23,13 +23,16 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 
         setWait(true);
 
-        const bets : number[][] = [];
-        while(bets.length < randoms) bets.push(surprise(balls, 25));
+        setTimeout(() => {
 
-        onMake(bets);
-        onHide();
+            const bets : number[][] = [];
+            while(bets.length < randoms) bets.push(surprise(balls, 25));
 
-        setTimeout(() => setWait(false), 1000);
+            onMake(bets);
+            onHide();
+            setWait(false);
+            
+        }, 1000);
 
     }
 
@@ -101,7 +104,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
                                 <option value="6">últimos seis sorteios</option>
                                 <option value="3">últimos três sorteios</option>
                                 <option value="1">último sorteio</option>
-                                <option value="0">todos os sorteios</option>
+                                <option value="0">todos os sorteios (PROCESSO DEMORADO)</option>
                             </FormSelect>
 
                         </FormGroup>
