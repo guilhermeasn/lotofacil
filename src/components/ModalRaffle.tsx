@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, FormControl, Modal, Overlay, Tooltip } from "react-bootstrap";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { Raffles } from "../helpers/fetch";
+import Loading from "./Loading";
 import Ticket from "./Ticket";
 
 export type ModalRaffleProps = {
@@ -40,7 +41,7 @@ export default function ModalRaffle({ data, show, onHide, onDetail } : ModalRaff
         setSelection([ max, data[max] ]);
     }, [ data, max, show ]);
 
-    return !selection ? <></> : (
+    return (
 
         <Modal show={ show } onHide={ onHide } centered>
 
@@ -50,32 +51,36 @@ export default function ModalRaffle({ data, show, onHide, onDetail } : ModalRaff
 
             <Modal.Body>
 
-                <div className="p-4 pt-0 d-flex">
+                { selection ? <>
 
-                    <FaCaretLeft
-                        onClick={ () => onSelection(selection && selection[0] ? selection[0] - 1 : 1) }
-                        className="clickable text-primary"
-                        size={ 50 }
-                    />
+                    <div className="p-4 pt-0 d-flex">
 
-                    <FormControl
-                        className="text-center"
-                        type="number"
-                        min={ 1 }
-                        max={ max }
-                        value={ selection[0] }
-                        onChange={ input => onSelection(parseInt(input.currentTarget.value)) }
-                    />
+                        <FaCaretLeft
+                            onClick={ () => onSelection(selection && selection[0] ? selection[0] - 1 : 1) }
+                            className="clickable text-primary"
+                            size={ 50 }
+                        />
 
-                    <FaCaretRight
-                        onClick={ () => onSelection(selection && selection[0] ? selection[0] + 1 : max ?? 1) }
-                        className="clickable text-primary"
-                        size={ 50 }
-                    />
+                        <FormControl
+                            className="text-center"
+                            type="number"
+                            min={ 1 }
+                            max={ max }
+                            value={ selection[0] }
+                            onChange={ input => onSelection(parseInt(input.currentTarget.value)) }
+                        />
 
-                </div>
+                        <FaCaretRight
+                            onClick={ () => onSelection(selection && selection[0] ? selection[0] + 1 : max ?? 1) }
+                            className="clickable text-primary"
+                            size={ 50 }
+                        />
 
-                <Ticket variant="success" actives={ selection[1] } />
+                    </div>
+
+                    <Ticket variant="success" actives={ selection[1] } />
+
+                </> : <Loading /> }
 
             </Modal.Body>
 
@@ -85,11 +90,11 @@ export default function ModalRaffle({ data, show, onHide, onDetail } : ModalRaff
                     Fechar
                 </Button>
 
-                <Button variant="outline-warning" onClick={ Array.isArray(selection[1]) ? () => onDetail(selection[1]) : undefined } disabled={ selection[1] === undefined }>
+                <Button variant="outline-warning" onClick={ selection && Array.isArray(selection[1]) ? () => onDetail(selection[1]) : undefined } disabled={ !selection || selection[1] === undefined }>
                     Detalhar
                 </Button>
 
-                <Button ref={ buttonCopy } variant="outline-success" onClick={ onCopy }>
+                <Button ref={ buttonCopy } variant="outline-success" onClick={ onCopy } disabled={ !selection || selection[1] === undefined }>
                     Copiar
                 </Button>
 

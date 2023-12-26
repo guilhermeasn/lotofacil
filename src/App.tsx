@@ -21,7 +21,8 @@ const price : number = 3;
 export default function App() {
 
     const [ data, setData ] = useState<Raffles>(null);
-    useEffect(() => { if(!data) raffles().then(setData); });  // eslint-disable-line react-hooks/exhaustive-deps
+    const load = () => { if(!data) raffles().then(setData).finally(() => data || setTimeout(load, 3000)); };
+    useEffect(load, [data, load]);
 
     const [ bets, setBets ] = useState<number[][]>(restore() ?? []);
     useEffect(() => { save(bets); }, [ bets ]);
