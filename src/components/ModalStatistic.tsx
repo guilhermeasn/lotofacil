@@ -34,7 +34,7 @@ const description : Record<keyof Statistic, string> = {
 export default function ModalStatistic({ show, onHide } : ModalStatisticProps) {
 
     const [ data, setData ] = useState<Statistic | null>(null);
-    const load = () => { if(!data) statistic().then(setData).finally(() => data || setTimeout(load, 3000)); };
+    const load = () => { if(!data) statistic().then(setData).finally(() => setTimeout(() => data || load, 3000)); };
     useEffect(load, [data, load]);
     
     return (

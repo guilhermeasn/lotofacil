@@ -21,7 +21,7 @@ const price : number = 3;
 export default function App() {
 
     const [ data, setData ] = useState<Raffles>(null);
-    const load = () => { if(!data) raffles().then(setData).finally(() => data || setTimeout(load, 3000)); };
+    const load = () => { if(!data) raffles().then(setData).finally(() => setTimeout(() => data || load, 3000)); };
     useEffect(load, [data, load]);
 
     const [ bets, setBets ] = useState<number[][]>(restore() ?? []);
