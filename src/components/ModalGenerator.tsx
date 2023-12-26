@@ -145,7 +145,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 
             <Modal.Footer>
 
-                <Button variant="secondary" onClick={ onHide }>
+                <Button variant="secondary" onClick={ wait ? undefined : onHide }>
                     Cancelar
                 </Button>
 

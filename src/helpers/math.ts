@@ -77,13 +77,13 @@ function combine(
 ) {
 
     if(combination.length === amount) {
-        onResult([...combination]);
+        onResult([ ...combination ]);
         return;
     }
 
-    for (let i = start; i <= overall; i++) {
-        combination.push(i);
-        combine(amount, overall, onResult, i + 1, combination);
+    for(let num : number = start; num <= overall; num++) {
+        combination.push(num);
+        combine(amount, overall, onResult, num + 1, combination);
         combination.pop();
     }
 
@@ -93,7 +93,7 @@ export function smartBets(amount : number, raffles : number[][], score : number[
     
     let bets : number[][] = [];
 
-
+    // construir
 
     return bets;
     
