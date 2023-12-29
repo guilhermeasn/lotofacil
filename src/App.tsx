@@ -89,7 +89,7 @@ export default function App() {
                 </Button>
 
                 <Button variant="success" className="m-1 btn-size-1" onClick={ () => setModal('generator') }>
-                    Gerar Aposta
+                    Gerar Apostas
                 </Button>
 
                 <Button variant="warning" className="m-1 btn-size-1" disabled={ bets.length === 0 } onClick={ () => download(new Blob(betsText()), 'lotofacil-bets.txt', 'text/plain') }>
