@@ -21,7 +21,8 @@ const price : number = 3;
 export default function App() {
 
     const [ data, setData ] = useState<Raffles>(null);
-    useEffect(() => { if(!data) raffles().then(setData); });  // eslint-disable-line react-hooks/exhaustive-deps
+    const load = () => { if(!data) raffles().then(setData).finally(() => setTimeout(() => data || load, 3000)); };
+    useEffect(load, [data, load]);
 
     const [ bets, setBets ] = useState<number[][]>(restore() ?? []);
     useEffect(() => { save(bets); }, [ bets ]);
@@ -40,6 +41,8 @@ export default function App() {
     const betAdd = (...bets : number[][]) => setBets(old => [ ...old, ...bets ]);
     const betDel = (index : number) => setBets(bets => bets.filter((_, key) => key !== index));
     const betUpdate = (index : number, bet : number[]) => setBets(bets => bets.map((old, key) => key === index ? bet : old));
+
+    const betsText = () : string[] => bets.map((bet, index) => `Aposta ${index + 1} => ${bet.length} números: ${bet.map(num => (num < 10 ? '0' : '') + num.toString()).join('-')} \n`);
 
     return <>
 
@@ -89,7 +92,7 @@ export default function App() {
                     Gerar Aposta
                 </Button>
 
-                <Button variant="warning" className="m-1 btn-size-1" disabled={ bets.length === 0 } onClick={ () => download(new Blob(bets.map(bet => bet.map(num => (num < 10 ? '0' : '') + num).join('-') + '\n')), 'lotofacil-bets.txt', 'text/plain') }>
+                <Button variant="warning" className="m-1 btn-size-1" disabled={ bets.length === 0 } onClick={ () => download(new Blob(betsText()), 'lotofacil-bets.txt', 'text/plain') }>
                     Download
                 </Button>
 
@@ -154,6 +157,7 @@ export default function App() {
         />
 
         <ModalGenerator
+            data={ data }
             show={ modal === 'generator' }
             onHide={ () => setModal(null) }
             onMake={ bets => betAdd(...bets) }

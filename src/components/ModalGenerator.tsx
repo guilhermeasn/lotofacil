@@ -1,23 +1,24 @@
 import { useState } from "react";
-import { Button, FormCheck, FormGroup, FormLabel, FormSelect, Modal, Spinner, Tab, Tabs } from "react-bootstrap";
+import { Button, FormGroup, FormLabel, FormSelect, Modal, Spinner, Tab, Tabs } from "react-bootstrap";
+import { Raffles } from "../helpers/fetch";
 import { surprise } from "../helpers/math";
+
 import Range from "./Range";
 
 export type ModalGeneratorProps = {
     show   : boolean;
+    data   : Raffles;
     onHide : () => void;
     onMake : (bets : number[][]) => void;
 }
 
-export default function ModalGenerator({ show, onHide, onMake } : ModalGeneratorProps) {
+export default function ModalGenerator({ show, data, onHide, onMake } : ModalGeneratorProps) {
 
     const [ balls, setBalls ] = useState<number>(15);
     const [ tab, setTab ] = useState<string>('random');
     const [ wait, setWait ] = useState<boolean>(false);
 
-    const [ randoms, setRandoms ] = useState<number>(1);
-
-    const [ hits, setHits ] = useState<number[]>([ 13, 14 ]);
+    const [ randoms, setRandoms ] = useState<number>(10);
 
     const getRandoms = () => {
 
@@ -26,6 +27,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
         setTimeout(() => {
 
             const bets : number[][] = [];
+
             while(bets.length < randoms) bets.push(surprise(balls, 25));
 
             onMake(bets);
@@ -39,16 +41,12 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 
     }
 
-    const getSmarts = () => {
-
-    }
-
     return (
 
         <Modal show={ show } onHide={ wait ? undefined : onHide }>
 
             <Modal.Header className="alert alert-success rounded-bottom-0 user-select-none" closeButton={ !wait }>
-                <Modal.Title>Gerador</Modal.Title>
+                <Modal.Title>Gerador de Apostas</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
@@ -62,7 +60,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
                     onChange={ setBalls }
                 />
 
-                <Tabs activeKey={ tab } onSelect={ key => key === null ? undefined : setTab(key) }>
+                <Tabs activeKey={ tab } onSelect={ key => wait || key === null ? undefined : setTab(key) }>
 
                     <Tab className="p-4" eventKey="random" title="Aleatório">
                         <Range
@@ -74,24 +72,18 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
                         />
                     </Tab>
 
-                    <Tab className="p-4" eventKey="smart" title="Inteligente" disabled>
+                    <Tab className="p-4" eventKey="statistic" title="Estatístico">
 
                         <FormGroup>
 
-                            <FormLabel>Obteve mais acertos com:</FormLabel>
+                            <FormLabel>Estratégia:</FormLabel>
 
-                            <div className="text-center">
-                                { Array(5).fill(11).map((v, k) => (
-                                    <FormCheck
-                                        key={ k }
-                                        label={ k + v }
-                                        type="checkbox"
-                                        checked={ hits.some(hit => hit === k + v) }
-                                        onChange={ () => setHits(hits => hits.some(hit => hit === k + v) ? hits.filter(hit => hit !== k + v) : [ ...hits, k + v ]) }
-                                        inline
-                                    />
-                                )) }
-                            </div>
+                            <FormSelect>
+                                <option>Números que mais saíram</option>
+                                <option>Números que menos saíram</option>
+                                <option>Números mais atrasados</option>
+                                <option>Todas as opções</option>
+                            </FormSelect>
 
                         </FormGroup>
 
@@ -100,22 +92,17 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
                             <FormLabel>Dos sorteios:</FormLabel>
 
                             <FormSelect>
+                                <option value="0">todos os sorteios</option>
                                 <option value="30">últimos trinta sorteios</option>
                                 <option value="24">últimos vinte e quatro sorteios</option>
                                 <option value="18">últimos dezoito sorteios</option>
                                 <option value="12">últimos doze sorteios</option>
                                 <option value="6">últimos seis sorteios</option>
                                 <option value="3">últimos três sorteios</option>
-                                <option value="1">último sorteio</option>
-                                <option value="0">todos os sorteios (PROCESSO DEMORADO)</option>
                             </FormSelect>
 
                         </FormGroup>
 
-                    </Tab>
-
-                    <Tab className="p-4" eventKey="statistic" title="Estatístico" disabled>
-                        estatistico
                     </Tab>
 
                 </Tabs>
@@ -124,11 +111,11 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 
             <Modal.Footer>
 
-                <Button variant="secondary" onClick={ onHide }>
+                <Button variant="secondary" onClick={ onHide } disabled={ wait }>
                     Cancelar
                 </Button>
 
-                <Button variant="outline-success" onClick={ tab === 'random' ? getRandoms : getSmarts } disabled={ wait || hits.length < 1 }>
+                <Button variant="outline-success" onClick={ tab === 'random' ? getRandoms : undefined } disabled={ wait }>
                     { wait ? <Spinner size='sm' /> : 'Gerar' }
                 </Button>
 

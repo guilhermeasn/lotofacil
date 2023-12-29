@@ -2,6 +2,7 @@ import map from "object-as-array/map";
 import { useEffect, useState } from "react";
 import { Alert, Button, ListGroup, Modal, Tab, Tabs } from "react-bootstrap";
 import { Statistic, statistic } from "../helpers/fetch";
+import Loading from "./Loading";
 
 export type ModalStatisticProps = {
     show : boolean;
@@ -33,7 +34,8 @@ const description : Record<keyof Statistic, string> = {
 export default function ModalStatistic({ show, onHide } : ModalStatisticProps) {
 
     const [ data, setData ] = useState<Statistic | null>(null);
-    useEffect(() => { if(!data) statistic().then(setData); }, [ data ]);
+    const load = () => { if(!data) statistic().then(setData).finally(() => setTimeout(() => data || load, 3000)); };
+    useEffect(load, [data, load]);
     
     return (
         
@@ -44,8 +46,8 @@ export default function ModalStatistic({ show, onHide } : ModalStatisticProps) {
             </Modal.Header>
 
             <Modal.Body>
-                <Tabs>
-                    { data && map(data, (v, k) => (
+                {  data ? <Tabs>
+                    { map(data, (v, k) => (
 
                         <Tab className="p-2" key={ k } eventKey={ k } title={ titles[k] }>
 
@@ -64,7 +66,7 @@ export default function ModalStatistic({ show, onHide } : ModalStatisticProps) {
                         </Tab>
                         
                     )) }
-                </Tabs>
+                </Tabs> : <Loading /> }
             </Modal.Body>
 
             <Modal.Footer>

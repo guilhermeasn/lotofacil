@@ -15,6 +15,12 @@ export async function raffles() : Promise<Raffles> {
     } catch(err) {
 
         console.error(err);
+
+        if(process.env.NODE_ENV === "development"){
+            const result = require('./backup.json');
+            return reduce(result, (p, c, k) => ({ ...p, [parseInt(k.toString())]: c.map((v:any) => parseInt(v)) }), {});
+        }
+
         return null;
 
     }
