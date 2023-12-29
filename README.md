@@ -8,7 +8,7 @@
 - Salva localmente e permite o download das apostas;
 - Revela o custo total e a probabilidade de ganhar;
 - Exibe as estátisticas matemáticas dos sorteios;
-- Gera apostas aleatórias, inteligentes ou estatísticas;
+- Gera apostas aleatórias;
 
 ## Para utilizar acesse
 
