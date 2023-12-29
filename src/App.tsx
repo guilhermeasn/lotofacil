@@ -42,6 +42,8 @@ export default function App() {
     const betDel = (index : number) => setBets(bets => bets.filter((_, key) => key !== index));
     const betUpdate = (index : number, bet : number[]) => setBets(bets => bets.map((old, key) => key === index ? bet : old));
 
+    const betsText = () : string[] => bets.map((bet, index) => `Aposta ${index + 1 } => ${bet.length} números: ${bet.map(num => (num < 10 ? '0' : '') + num).join('-')} \n`);
+
     return <>
 
         <Header
@@ -90,7 +92,7 @@ export default function App() {
                     Gerar Aposta
                 </Button>
 
-                <Button variant="warning" className="m-1 btn-size-1" disabled={ bets.length === 0 } onClick={ () => download(new Blob(bets.map(bet => bet.map(num => (num < 10 ? '0' : '') + num).join('-') + '\n')), 'lotofacil-bets.txt', 'text/plain') }>
+                <Button variant="warning" className="m-1 btn-size-1" disabled={ bets.length === 0 } onClick={ () => download(new Blob(betsText()), 'lotofacil-bets.txt', 'text/plain') }>
                     Download
                 </Button>
 
