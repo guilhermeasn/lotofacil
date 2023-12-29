@@ -1,5 +1,4 @@
 import forEach from "object-as-array/forEach";
-import reduce from "object-as-array/reduce";
 
 export function factorial(num : number) : number {
     let calc : number = num;
@@ -97,48 +96,6 @@ function combine(amount : number, overall : number, onResult : (combination : nu
 
     loop();
 
-}
-
-export function smartBets(amount : number, raffles : number[][], hits : number[], limit : number, onLoop : () => boolean) : Promise<number[][]> {
-    
-    return new Promise(resolve => setTimeout(() => {
-
-        const bets : number[][] = [];
-
-        combine(amount, 25, c => {
-            bets.push(c);
-            return false;
-        });
-
-        let current : number = 1;
-        
-        let selection : number[][] = [];
-
-        bets.forEach(bet => {
-
-            const match : Record<number, number> = matches(bet, raffles);
-            const score : number = reduce(match, (t, v, k) => hits.some(h => h == k) ? t + v : t, 0); // eslint-disable-line 
-
-            if(score >= current) {
-                if(score > current) selection = [];
-                selection.push([ match?.[hits.reduce((p, v) => v < p ? v : p, 15) - 1] ?? 0, ...bet ]);
-            }
-
-        });
-
-        console.dir(selection);
-
-        selection = selection.sort((a, b) => a[0] - b[0]);
-        selection = selection.map(bet => { bet.shift(); return bet; });
-        
-        selection.splice(limit);
-
-        console.dir(selection);
-
-        resolve(selection);
-
-    }, 1000));
-    
 }
 
 export function numberOfCombination(sequence : number[]) : Promise<number> {
