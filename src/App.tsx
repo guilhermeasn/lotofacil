@@ -155,6 +155,7 @@ export default function App() {
         />
 
         <ModalGenerator
+            data={ data }
             show={ modal === 'generator' }
             onHide={ () => setModal(null) }
             onMake={ bets => betAdd(...bets) }

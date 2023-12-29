@@ -1,4 +1,5 @@
 import forEach from "object-as-array/forEach";
+import reduce from "object-as-array/reduce";
 
 export function factorial(num : number) : number {
     let calc : number = num;
@@ -89,17 +90,38 @@ function combine(
 
 }
 
-export function smartBets(amount : number, raffles : number[][], score : number[], limit : number) : number[][] {
+export function smartBets(amount : number, raffles : number[][], hits : number[], limit : number) : Promise<number[][]> {
     
-    let bets : number[][] = [];
+    return new Promise(resolve => setTimeout((() => {
 
-    // construir
+        let current : number = 0;
+        let bets : number[][] = [];
 
-    return bets;
+        combine(amount, 25, combination => {
+
+            const match : Record<number, number> = matches(combination, raffles);
+            const score : number = reduce(match, (t, v, k) => hits.some(h => h === k) ? t + v : t, 0);
+
+            if(score < current) return;
+            if(score > current) bets = [];
+
+            bets.push([ match?.[hits.reduce((p, v) => v < p ? v : p, 15) - 1] ?? 0, ...combination ]);
+
+        });
+
+        bets = bets.sort((a, b) => a[0] - b[0]);
+        console.log(bets);
+        
+        bets = bets.map(bet => { bet.shift(); return bet; });
+        console.log(bets);
+
+        resolve(bets);
+
+    })));
     
 }
 
-export async function numberOfCombination(sequence : number[]) : Promise<number> {
+export function numberOfCombination(sequence : number[]) : Promise<number> {
 
     return new Promise(resolve => setTimeout(() => {
 
@@ -116,6 +138,22 @@ export async function numberOfCombination(sequence : number[]) : Promise<number>
         resolve(result);
 
     }));
+
+}
+
+export function surprise(amount : number = 15, overall : number = 25) : number[] {
+
+    if(amount > overall) throw new Error('amount cannot be greater than overall');
+
+    const result : number[] = [];
+
+    while(result.length < amount) {
+        const random : number = randomInt(1, overall);
+        if(result.some(num => num === random)) continue;
+        result.push(random);
+    }
+
+    return result.sort((a, b) => a - b);
 
 }
 
@@ -152,20 +190,4 @@ export function randomInt(min : number, max : number) : number {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-export function surprise(amount : number = 15, overall : number = 25) : number[] {
-
-    if(amount > overall) throw new Error('amount cannot be greater than overall');
-
-    const result : number[] = [];
-
-    while(result.length < amount) {
-        const random : number = randomInt(1, overall);
-        if(result.some(num => num === random)) continue;
-        result.push(random);
-    }
-
-    return result.sort((a, b) => a - b);
-
 }

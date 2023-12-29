@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { Button, FormCheck, FormGroup, FormLabel, FormSelect, Modal, Spinner, Tab, Tabs } from "react-bootstrap";
-import { surprise } from "../helpers/math";
+import { smartBets, surprise } from "../helpers/math";
+import { Raffles } from "../helpers/fetch";
 import Range from "./Range";
+import map from "object-as-array/map";
 
 export type ModalGeneratorProps = {
     show   : boolean;
+    data   : Raffles;
     onHide : () => void;
     onMake : (bets : number[][]) => void;
 }
 
-export default function ModalGenerator({ show, onHide, onMake } : ModalGeneratorProps) {
+export default function ModalGenerator({ show, data, onHide, onMake } : ModalGeneratorProps) {
 
     const [ balls, setBalls ] = useState<number>(15);
     const [ tab, setTab ] = useState<string>('random');
@@ -41,6 +44,21 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
     }
 
     const getSmarts = () => {
+
+        if(data === null) return;
+
+        setWait(true);
+        smartBets(balls, map(data, r => r), hits, smarts).then(bets => {
+
+            onMake(bets);
+
+            setTimeout(() => {
+                onHide();
+                setWait(false);
+            }, 1000);
+
+        });
+
 
     }
 
@@ -75,7 +93,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
                         />
                     </Tab>
 
-                    <Tab className="p-4" eventKey="smart" title="Inteligente">
+                    <Tab className="p-4" eventKey="smart" title="Inteligente" disabled={ data === null }>
 
                         <Range
                             label="Quantidade Máxima de Apostas"
@@ -164,6 +182,7 @@ export default function ModalGenerator({ show, onHide, onMake } : ModalGenerator
 function Select() {
     return (
         <FormSelect>
+            <option value="0">todos os sorteios</option>
             <option value="30">últimos trinta sorteios</option>
             <option value="24">últimos vinte e quatro sorteios</option>
             <option value="18">últimos dezoito sorteios</option>
@@ -171,7 +190,6 @@ function Select() {
             <option value="6">últimos seis sorteios</option>
             <option value="3">últimos três sorteios</option>
             <option value="1">último sorteio</option>
-            <option value="0">todos os sorteios</option>
         </FormSelect>
     )
 }
