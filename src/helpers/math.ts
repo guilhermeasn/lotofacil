@@ -99,41 +99,45 @@ function combine(amount : number, overall : number, onResult : (combination : nu
 
 }
 
-function todos(amount : number, overall : number) : number[][] {
-    let bets : number[][] = [];
-    combine(amount, overall, c => { bets.push(c); return false; });
-    return bets;
-}
-
 export function smartBets(amount : number, raffles : number[][], hits : number[], limit : number, onLoop : () => boolean) : Promise<number[][]> {
     
     return new Promise(resolve => setTimeout(() => {
 
-        let current : number = 0;
-        let bets : number[][] = [];
+        const bets : number[][] = [];
 
-        combine(amount, 25, combination => {
-            
-            const match : Record<number, number> = matches(combination, raffles);
-            const score : number = reduce(match, (t, v, k) => hits.some(h => h === k) ? t + v : t, 0);
-            
+        combine(amount, 25, c => {
+            bets.push(c);
+            return false;
+        });
+
+        let current : number = 1;
+        
+        let selection : number[][] = [];
+
+        bets.forEach(bet => {
+
+            const match : Record<number, number> = matches(bet, raffles);
+            const score : number = reduce(match, (t, v, k) => hits.some(h => h == k) ? t + v : t, 0); // eslint-disable-line 
+
             if(score >= current) {
-                if(score > current) bets = [];
-                bets.push([ match?.[hits.reduce((p, v) => v < p ? v : p, 15) - 1] ?? 0, ...combination ]);
+                if(score > current) selection = [];
+                selection.push([ match?.[hits.reduce((p, v) => v < p ? v : p, 15) - 1] ?? 0, ...bet ]);
             }
-
-            return onLoop();
 
         });
 
-        bets = bets.sort((a, b) => a[0] - b[0]);
-        bets = bets.map(bet => { bet.shift(); return bet; });
+        console.dir(selection);
+
+        selection = selection.sort((a, b) => a[0] - b[0]);
+        selection = selection.map(bet => { bet.shift(); return bet; });
         
-        bets.splice(limit);
+        selection.splice(limit);
 
-        resolve(bets);
+        console.dir(selection);
 
-    }));
+        resolve(selection);
+
+    }, 1000));
     
 }
 
