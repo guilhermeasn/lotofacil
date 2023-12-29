@@ -17,6 +17,12 @@ export function combinatorics(amount : number, overall : number) : number {
 
 }
 
+export function randomInt(min : number, max : number) : number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export function betQuantity(balls : number) : number {
     return balls > 15 ? combinatorics(15, balls) : balls === 15 ? 1 : 0;
 }
@@ -69,55 +75,65 @@ export function whoMatches(bet : number[], raffles : Record<number, number[]>) :
 
 }
 
-function combine(
-    amount      : number,
-    overall     : number,
-    onResult    : (combination : number[]) => void, 
-    start       : number = 1,
-    combination : number[] = []
-) {
+function combine(amount : number, overall : number, onResult : (combination : number[]) => boolean) {
 
-    if(combination.length === amount) {
-        onResult([ ...combination ]);
-        return;
+    let stop : boolean = false;
+
+    function loop(start : number = 1, combination : number[] = []) {
+
+        if(combination.length === amount) {
+            stop = onResult([ ...combination ]);
+            return;
+        }
+    
+        for(let num : number = start; num <= overall; num++) {
+            if(stop) break;
+            combination.push(num);
+            loop(num + 1, combination);
+            combination.pop();
+        }
+
     }
 
-    for(let num : number = start; num <= overall; num++) {
-        combination.push(num);
-        combine(amount, overall, onResult, num + 1, combination);
-        combination.pop();
-    }
+    loop();
 
 }
 
-export function smartBets(amount : number, raffles : number[][], hits : number[], limit : number) : Promise<number[][]> {
+function todos(amount : number, overall : number) : number[][] {
+    let bets : number[][] = [];
+    combine(amount, overall, c => { bets.push(c); return false; });
+    return bets;
+}
+
+export function smartBets(amount : number, raffles : number[][], hits : number[], limit : number, onLoop : () => boolean) : Promise<number[][]> {
     
-    return new Promise(resolve => setTimeout((() => {
+    return new Promise(resolve => setTimeout(() => {
 
         let current : number = 0;
         let bets : number[][] = [];
 
         combine(amount, 25, combination => {
-
+            
             const match : Record<number, number> = matches(combination, raffles);
             const score : number = reduce(match, (t, v, k) => hits.some(h => h === k) ? t + v : t, 0);
+            
+            if(score >= current) {
+                if(score > current) bets = [];
+                bets.push([ match?.[hits.reduce((p, v) => v < p ? v : p, 15) - 1] ?? 0, ...combination ]);
+            }
 
-            if(score < current) return;
-            if(score > current) bets = [];
-
-            bets.push([ match?.[hits.reduce((p, v) => v < p ? v : p, 15) - 1] ?? 0, ...combination ]);
+            return onLoop();
 
         });
 
         bets = bets.sort((a, b) => a[0] - b[0]);
-        console.log(bets);
-        
         bets = bets.map(bet => { bet.shift(); return bet; });
-        console.log(bets);
+        
+        bets.splice(limit);
 
         resolve(bets);
 
-    })));
+    }));
     
 }
 
@@ -129,10 +145,16 @@ export function numberOfCombination(sequence : number[]) : Promise<number> {
         let result : number = 0;
 
         combine(sequence.length, 25, combination => {
+
             ++count;
+
             if(combination.every(n => sequence.some(s => s === n))) {
                 result = count;
+                return true;
             }
+
+            return false;
+
         });
 
         resolve(result);
@@ -184,10 +206,4 @@ export function replicates(bets : number[][]) : number[] {
             bet.every(num => bet2.some(num2 => num === num2))
         )).length > 1 ? [ ...res, index ] : res
     ), []);
-}
-
-export function randomInt(min : number, max : number) : number {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
 }

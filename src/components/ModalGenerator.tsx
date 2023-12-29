@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { Button, FormCheck, FormGroup, FormLabel, FormSelect, Modal, Spinner, Tab, Tabs } from "react-bootstrap";
-import { smartBets, surprise } from "../helpers/math";
-import { Raffles } from "../helpers/fetch";
-import Range from "./Range";
 import map from "object-as-array/map";
+
+import { useState } from "react";
+import { Alert, Button, FormCheck, FormGroup, FormLabel, FormSelect, Modal, Spinner, Tab, Tabs } from "react-bootstrap";
+import { Raffles } from "../helpers/fetch";
+import { smartBets, surprise } from "../helpers/math";
+
+import Range from "./Range";
 
 export type ModalGeneratorProps = {
     show   : boolean;
@@ -11,6 +13,8 @@ export type ModalGeneratorProps = {
     onHide : () => void;
     onMake : (bets : number[][]) => void;
 }
+
+let cancel : boolean = false;
 
 export default function ModalGenerator({ show, data, onHide, onMake } : ModalGeneratorProps) {
 
@@ -23,6 +27,18 @@ export default function ModalGenerator({ show, data, onHide, onMake } : ModalGen
 
     const [ hits, setHits ] = useState<number[]>([ 13, 14 ]);
 
+    const send = (bets : number[][]) : void => {
+
+        if(!cancel) onMake(bets);
+
+        setTimeout(() => {
+            if(!cancel) onHide();
+            setWait(false);
+            cancel = false;
+        }, 1000);
+
+    }
+
     const getRandoms = () => {
 
         setWait(true);
@@ -30,36 +46,25 @@ export default function ModalGenerator({ show, data, onHide, onMake } : ModalGen
         setTimeout(() => {
 
             const bets : number[][] = [];
-            while(bets.length < randoms) bets.push(surprise(balls, 25));
 
-            onMake(bets);
+            while(bets.length < randoms) {
+                if(cancel) break;
+                bets.push(surprise(balls, 25));
+            }
 
-            setTimeout(() => {
-                onHide();
-                setWait(false);
-            }, 1000);
+            send(bets);
             
         }, 1000);
 
     }
 
     const getSmarts = () => {
-
         if(data === null) return;
-
         setWait(true);
-        smartBets(balls, map(data, r => r), hits, smarts).then(bets => {
-
-            onMake(bets);
-
-            setTimeout(() => {
-                onHide();
-                setWait(false);
-            }, 1000);
-
+        smartBets(balls, map(data, r => r), hits, smarts, () => cancel).then(send).finally(() => {
+            cancel = false;
+            setWait(false);
         });
-
-
     }
 
     return (
@@ -81,7 +86,7 @@ export default function ModalGenerator({ show, data, onHide, onMake } : ModalGen
                     onChange={ setBalls }
                 />
 
-                <Tabs activeKey={ tab } onSelect={ key => key === null ? undefined : setTab(key) }>
+                <Tabs activeKey={ tab } onSelect={ key => wait || key === null ? undefined : setTab(key) }>
 
                     <Tab className="p-4" eventKey="random" title="Aleatório">
                         <Range
@@ -94,6 +99,10 @@ export default function ModalGenerator({ show, data, onHide, onMake } : ModalGen
                     </Tab>
 
                     <Tab className="p-4" eventKey="smart" title="Inteligente" disabled={ data === null }>
+
+                        <Alert variant='danger'>
+                            AVISO: Demora muito tempo!
+                        </Alert>
 
                         <Range
                             label="Quantidade Máxima de Apostas"
@@ -163,8 +172,8 @@ export default function ModalGenerator({ show, data, onHide, onMake } : ModalGen
 
             <Modal.Footer>
 
-                <Button variant="secondary" onClick={ wait ? undefined : onHide }>
-                    Cancelar
+                <Button variant="secondary" onClick={ wait ? () => cancel = true : onHide }>
+                    { wait ? 'Cancelar' : 'Fechar' }
                 </Button>
 
                 <Button variant="outline-success" onClick={ tab === 'random' ? getRandoms : getSmarts } disabled={ wait || hits.length < 1 }>
