@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import { Raffles } from "../helpers/fetch";
-import { surprise } from "../helpers/math";
 
+import trigger from "../helpers/trigger";
 import Range from "./Range";
 
 export type ModalGeneratorProps = {
@@ -22,20 +22,14 @@ export default function ModalGenerator({ show, data, onHide, onMake } : ModalGen
 
         setWait(true);
 
-        setTimeout(() => {
-
-            const bets : number[][] = [];
-
-            while(bets.length < randoms) bets.push(surprise(balls, 25));
+        trigger('surprises', randoms, balls, 25).then(bets => {
 
             onMake(bets);
 
-            setTimeout(() => {
-                onHide();
-                setWait(false);
-            }, 1000);
+            onHide();
+            setWait(false);
             
-        }, 1000);
+        });
 
     }
 

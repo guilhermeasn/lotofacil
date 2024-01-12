@@ -136,6 +136,12 @@ export function surprise(amount : number = 15, overall : number = 25) : number[]
 
 }
 
+export function surprises(quantity : number, amount : number = 15, overall : number = 25) : number[][] {
+    const bets : number[][] = [];
+    while(bets.length < quantity) bets.push(surprise(amount, overall));
+    return bets;
+}
+
 export function sum(bet : number[]) : number {
     return bet.reduce((total, num) => total + num, 0);
 }
