@@ -98,9 +98,7 @@ function combine(amount : number, overall : number, onResult : (combination : nu
 
 }
 
-export function numberOfCombination(sequence : number[]) : Promise<number> {
-
-    return new Promise(resolve => setTimeout(() => {
+export function numberOfCombination(sequence : number[]) : number {
 
         let count : number = 0;
         let result : number = 0;
@@ -118,9 +116,7 @@ export function numberOfCombination(sequence : number[]) : Promise<number> {
 
         });
 
-        resolve(result);
-
-    }));
+        return result;
 
 }
 
