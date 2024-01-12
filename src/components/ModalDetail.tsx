@@ -30,6 +30,8 @@ const description : Record<keyof Analytic, string> = {
     primes   : 'Números primos'
 }
 
+trigger('surprise').then(console.log);
+
 export default function ModalDetail({ bet, price, show, onHide } : ModalDetailProps) {
 
     const [ analytic, setAnalytic ] = useState<Analytic | null>(null);
