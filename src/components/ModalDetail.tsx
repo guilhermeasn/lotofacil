@@ -1,7 +1,10 @@
 import map from "object-as-array/map";
+
 import { useEffect, useState } from "react";
 import { Button, ListGroup, Modal } from "react-bootstrap";
-import { betQuantity, mean, numberOfCombination, pairs, primes, sum } from "../helpers/math";
+import { betQuantity, mean, pairs, primes, sum } from "../helpers/math";
+
+import trigger from "../helpers/trigger";
 import Loading from "./Loading";
 
 export type ModalDetailProps = {
@@ -11,16 +14,10 @@ export type ModalDetailProps = {
     onHide : () => void;
 }
 
-type Analytic = {
-    length   : number;
-    quantity : number;
-    price    : number;
-    relative : number;
-    sum      : number;
-    mean     : number;
-    pairs    : number;
-    primes   : number;
-}
+type Analytic = Record<(
+    'length' | 'quantity' | 'price' | 'relative' |
+    'sum'    | 'mean'     | 'pairs' | 'primes'
+), number>;
 
 const description : Record<keyof Analytic, string> = {
     length   : 'Quantidade de números',
@@ -33,25 +30,32 @@ const description : Record<keyof Analytic, string> = {
     primes   : 'Números primos'
 }
 
+trigger('surprise').then(console.log);
+
 export default function ModalDetail({ bet, price, show, onHide } : ModalDetailProps) {
 
-    const [ analytic, setAnalytic ] = useState<Analytic | null>();
+    const [ analytic, setAnalytic ] = useState<Analytic | null>(null);
+    const [ relative, setRelative ] = useState<number | null>(null);
 
     useEffect(() => {
 
-        setAnalytic(null);
+        if(!show || !bet) {
+            setAnalytic(null);
+            setRelative(null);
+            return;
+        }
 
-        if(show && bet) numberOfCombination(bet).then(relative => {
-            setAnalytic({
-                length   : bet.length,
-                quantity : betQuantity(bet.length),
-                price    : betQuantity(bet.length) * price,
-                relative : relative,
-                sum      : sum(bet),
-                mean     : mean(bet),
-                pairs    : pairs(bet),
-                primes   : primes(bet)
-            })
+        trigger('numberOfCombination', bet).then(setRelative);
+
+        setAnalytic({
+            length   : bet.length,
+            quantity : betQuantity(bet.length),
+            price    : betQuantity(bet.length) * price,
+            relative : 0,
+            sum      : sum(bet),
+            mean     : mean(bet),
+            pairs    : pairs(bet),
+            primes   : primes(bet)
         });
 
     }, [bet, price, show]);
@@ -78,7 +82,7 @@ export default function ModalDetail({ bet, price, show, onHide } : ModalDetailPr
 
                             <ListGroup.Item className="d-flex px-4 justify-content-between" key={ key }>
                                 <span>{ description[key] }:&nbsp;</span>
-                                <span>{ num.toLocaleString('pt-br', key === 'price' ? { style: 'currency', currency: 'BRL' } : undefined) }</span>
+                                <span>{ key === 'relative' ? (relative?.toLocaleString('pt-br') ?? '...') : num.toLocaleString('pt-br', key === 'price' ? { style: 'currency', currency: 'BRL' } : undefined) }</span>
                             </ListGroup.Item>
 
                         )) }

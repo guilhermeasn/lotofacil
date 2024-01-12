@@ -26,7 +26,7 @@ export function betQuantity(balls : number) : number {
     return balls > 15 ? combinatorics(15, balls) : balls === 15 ? 1 : 0;
 }
 
-export const totalBets : number = combinatorics(15, 25);
+const totalBets : number = combinatorics(15, 25);
 
 export function probability(quantity : number) : number {
     return quantity > 0 ? Math.round(totalBets / quantity) : 0;
@@ -98,29 +98,25 @@ function combine(amount : number, overall : number, onResult : (combination : nu
 
 }
 
-export function numberOfCombination(sequence : number[]) : Promise<number> {
+export function numberOfCombination(sequence : number[]) : number {
 
-    return new Promise(resolve => setTimeout(() => {
+    let count : number = 0;
+    let result : number = 0;
 
-        let count : number = 0;
-        let result : number = 0;
+    combine(sequence.length, 25, combination => {
 
-        combine(sequence.length, 25, combination => {
+        ++count;
 
-            ++count;
+        if(combination.every(n => sequence.some(s => s === n))) {
+            result = count;
+            return true;
+        }
 
-            if(combination.every(n => sequence.some(s => s === n))) {
-                result = count;
-                return true;
-            }
+        return false;
 
-            return false;
+    });
 
-        });
-
-        resolve(result);
-
-    }));
+    return result;
 
 }
 
