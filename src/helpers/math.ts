@@ -74,20 +74,53 @@ export function whoMatches(bet : number[], raffles : Record<number, number[]>) :
 
 }
 
+function combine(amount : number, overall : number, onResult : (combination : number[]) => boolean) {
+
+    let stop : boolean = false;
+
+    function loop(start : number = 1, combination : number[] = []) {
+
+        if(combination.length === amount) {
+            stop = onResult([ ...combination ]);
+            return;
+        }
+    
+        for(let num : number = start; num <= overall; num++) {
+            if(stop) break;
+            combination.push(num);
+            loop(num + 1, combination);
+            combination.pop();
+        }
+
+    }
+
+    loop();
+
+}
+
 export function numberOfCombination(sequence : number[]) : Promise<number> {
 
-    return new Promise(resolve => {
+    return new Promise(resolve => setTimeout(() => {
 
-        const worker : Worker = new Worker(new URL('../workers/combine.ts', import.meta.url));
+        let count : number = 0;
+        let result : number = 0;
 
-        worker.onmessage = ({ data }) => {
-            console.log(data);
-            resolve(data.result);
-        };
+        combine(sequence.length, 25, combination => {
 
-        worker.postMessage({ cmd: "numberOfCombination", sequence });
+            ++count;
 
-    });
+            if(combination.every(n => sequence.some(s => s === n))) {
+                result = count;
+                return true;
+            }
+
+            return false;
+
+        });
+
+        resolve(result);
+
+    }));
 
 }
 
