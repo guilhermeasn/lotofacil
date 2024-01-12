@@ -1,4 +1,4 @@
-import * as math from './math';
+import * as math from '../helpers/math';
 
 export type MathFuncs = keyof typeof math;
 export type MathFunc<F extends MathFuncs> = typeof math[F];
@@ -18,7 +18,7 @@ export default function trigger<F extends MathFuncs>(func : F, ...args : MathFun
             return;
         }
 
-        const worker = new Worker(new URL('./worker.js', import.meta.url));
+        const worker = new Worker(new URL('./listener.js', import.meta.url));
 
         worker.onmessage = ({ data }) => resolve(data);
         worker.postMessage({ func, args });

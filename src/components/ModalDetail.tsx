@@ -1,11 +1,10 @@
 import map from "object-as-array/map";
 
 import { useEffect, useState } from "react";
-import { Button, ListGroup, Modal } from "react-bootstrap";
+import { Button, ListGroup, Modal, Placeholder } from "react-bootstrap";
 import { betQuantity, mean, pairs, primes, sum } from "../helpers/math";
 
-import trigger from "../helpers/trigger";
-import Loading from "./Loading";
+import trigger from "../worker";
 
 export type ModalDetailProps = {
     bet ?: number[];
@@ -66,28 +65,26 @@ export default function ModalDetail({ bet, price, show, onHide } : ModalDetailPr
             </Modal.Header>
 
             <Modal.Body>
-                { analytic && bet ? (
 
-                    <ListGroup variant="flush">
+                <ListGroup variant="flush">
 
-                        <ListGroup.Item className="text-center small">
-                            <strong>
-                                { bet.join('-') }
-                            </strong>
+                    <ListGroup.Item className="text-center small">
+                        <strong>
+                            { bet ? bet.join('-') : <Placeholder xs={ 10 } /> }
+                        </strong>
+                    </ListGroup.Item>
+
+                    { analytic && map(analytic, (num, key) => (
+
+                        <ListGroup.Item className="d-flex px-4 justify-content-between" key={ key }>
+                            <span>{ description[key] }:&nbsp;</span>
+                            <span>{ key === 'relative' ? (relative?.toLocaleString('pt-br') ?? '...') : num.toLocaleString('pt-br', key === 'price' ? { style: 'currency', currency: 'BRL' } : undefined) }</span>
                         </ListGroup.Item>
 
-                        { map(analytic, (num, key) => (
+                    )) }
 
-                            <ListGroup.Item className="d-flex px-4 justify-content-between" key={ key }>
-                                <span>{ description[key] }:&nbsp;</span>
-                                <span>{ key === 'relative' ? (relative?.toLocaleString('pt-br') ?? '...') : num.toLocaleString('pt-br', key === 'price' ? { style: 'currency', currency: 'BRL' } : undefined) }</span>
-                            </ListGroup.Item>
+                </ListGroup>
 
-                        )) }
-
-                    </ListGroup>
-
-                ) : <Loading /> }
             </Modal.Body>
 
             <Modal.Footer>

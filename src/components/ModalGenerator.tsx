@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import { Raffles } from "../helpers/fetch";
 
-import trigger from "../helpers/trigger";
+import trigger from "../worker";
 import Range from "./Range";
 
 export type ModalGeneratorProps = {

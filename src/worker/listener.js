@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 
-import * as math from './math';
+import * as math from '../helpers/math';
 
 self.onmessage = ({ data }) => {
     if(!(data.func in math)) return;

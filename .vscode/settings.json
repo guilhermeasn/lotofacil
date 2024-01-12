@@ -8,7 +8,8 @@
     },
     "material-icon-theme.folders.associations": {
         ".archive": "Archive",
-        ".github/workflows": "github"
+        ".github/workflows": "github",
+        "worker": "Hook"
     },
     "files.watcherExclude": {
         "**/.archive/**": true
