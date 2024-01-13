@@ -13,7 +13,7 @@ export default function trigger<F extends MathFuncs>(func : F, ...args : MathFun
     return new Promise((resolve, reject) => {
 
         if(typeof math[func] !== 'function') {
-            reject(Error('function was not found in math'))
+            reject(Error('function was not found in math'));
             return;
         }
 
