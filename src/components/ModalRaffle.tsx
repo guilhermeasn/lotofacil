@@ -1,5 +1,5 @@
 import copy from "copy-to-clipboard";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, FormControl, Modal, Overlay, Tooltip } from "react-bootstrap";
 import { FaCaretLeft, FaCaretRight } from "react-icons/fa";
 import { Raffles } from "../helpers/fetch";
@@ -21,20 +21,20 @@ export default function ModalRaffle({ data, show, onHide, onDetail } : ModalRaff
     const [ alert, setAlert ] = useState<boolean>(false);
     const [ selection, setSelection ] = useState<[ number | undefined, number[] ]>();
 
-    const onSelection = (num : number) : void => {
+    const onSelection = useCallback((num : number) : void => {
         if(!data || !max) return;
         if(isNaN(num)) setSelection(selection ? [ undefined, [] ] : undefined);
         if(num < 1) num = 1;
         if(num > max) return;
         setSelection([ num, data[num] ]);
-    }
+    }, [ data, max, selection ]);
 
-    const onCopy = () : void => {
+    const onCopy = useCallback(() : void => {
         if(!selection) return;
         if(!copy(selection[1].sort((a, b) => a - b).map(n => (n < 10 ? '0' : '') + n.toString()).join('-'))) return;
         setAlert(true);
         setTimeout(() => setAlert(false), 5000);
-    }
+    }, [ selection ]);
 
     useEffect(() => {
         if(!data || !max) return;

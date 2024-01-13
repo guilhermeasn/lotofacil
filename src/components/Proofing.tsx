@@ -1,6 +1,6 @@
 import reduce from "object-as-array/reduce";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FloatingLabel, Form, OverlayTrigger, Table, Tooltip } from "react-bootstrap";
 import { Raffles } from "../helpers/fetch";
 import { whoMatches } from "../helpers/math";
@@ -23,12 +23,12 @@ export default function Proofing({ data, bets } : ProofingProps) {
     const [ selection, setSelection ] = useState<[ boolean, number, number ]>([ true, 1, 1 ]);
     useEffect(() => { if(data) setSelection([ true, 1, last ])}, [ data, last ]);
 
-    const onSelection = (end : number) : void => {
+    const onSelection = useCallback((end : number) : void => {
         if(!end) setSelection([ false, selection[1], selection[2] ]);
         else setSelection([ true, last - end + 1, last ]);
-    }
+    }, [last, selection]);
 
-    const onUserSelection = (position : 'start' | 'end', num : number) : void => {
+    const onUserSelection = useCallback((position : 'start' | 'end', num : number) : void => {
         if(num < 1) num = 1;
         if(num > last) num = last;
         setSelection([
@@ -36,7 +36,7 @@ export default function Proofing({ data, bets } : ProofingProps) {
             position === 'start' ? num : selection[1],
             position === 'end' ? num : selection[2]
         ]);
-    }
+    }, [last, selection]);
 
     useEffect(() => {
         if(!data) return;

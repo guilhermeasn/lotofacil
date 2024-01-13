@@ -58,6 +58,7 @@ export default function ModalDetail({ bet, price, show, onHide } : ModalDetailPr
     }, [bet, price, show]);
 
     return (
+        
         <Modal show={ show } onHide={ onHide } centered>
             
             <Modal.Header className="alert alert-warning rounded-bottom-0 user-select-none" closeButton>
@@ -94,6 +95,7 @@ export default function ModalDetail({ bet, price, show, onHide } : ModalDetailPr
             </Modal.Footer>
             
         </Modal>
+
     );
 
 }

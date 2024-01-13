@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { FormControl, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FaChartLine, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 
@@ -12,7 +13,7 @@ export type BetProps = {
 
 export default function Bet({ cod, bet, warn = false, onDetail, onDelete, onUpdate } : BetProps) {
 
-    const betText : string = bet.map(num => (num < 10 ? '0' : '') + num.toString()).join('-');
+    const betText : string = useMemo(() => bet.map(num => (num < 10 ? '0' : '') + num.toString()).join('-'), [ bet ]);
 
     return (
 

@@ -1,6 +1,6 @@
 import download from 'downloadjs';
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, Button, Col, Container, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
 import { Raffles, raffles, restore, save } from "./helpers/fetch";
 import { betQuantity, replicates } from "./helpers/math";
@@ -42,7 +42,7 @@ export default function App() {
     const betDel = (index : number) => setBets(bets => bets.filter((_, key) => key !== index));
     const betUpdate = (index : number, bet : number[]) => setBets(bets => bets.map((old, key) => key === index ? bet : old));
 
-    const betsText = () : string[] => bets.map((bet, index) => `Aposta ${index + 1} => ${bet.length} numeros: ${bet.map(num => (num < 10 ? '0' : '') + num.toString()).join('-')} \n`);
+    const betsText = useCallback(() : string[] => bets.map((bet, index) => `Aposta ${index + 1} => ${bet.length} numeros: ${bet.map(num => (num < 10 ? '0' : '') + num.toString()).join('-')} \n`), [ bets ]);
 
     return <>
 

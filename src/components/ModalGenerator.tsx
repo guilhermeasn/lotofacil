@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button, Modal, Spinner } from "react-bootstrap";
 import { Raffles } from "../helpers/fetch";
 
@@ -18,20 +18,20 @@ export default function ModalGenerator({ show, data, onHide, onMake } : ModalGen
     const [ wait, setWait ] = useState<boolean>(false);
     const [ randoms, setRandoms ] = useState<number>(10);
 
-    const getRandoms = () => {
+    const getRandoms = useCallback(() => {
 
         setWait(true);
 
         trigger('surprises', randoms, balls, 25).then(bets => {
 
-            onMake(bets);
+            if(show) onMake(bets);
 
             onHide();
             setWait(false);
             
         });
 
-    }
+    }, [randoms, balls, show, onMake, onHide]);
 
     return (
 
@@ -50,6 +50,7 @@ export default function ModalGenerator({ show, data, onHide, onMake } : ModalGen
                     max={ 20 }
                     num={ balls }
                     onChange={ setBalls }
+                    disabled={ wait }
                 />
 
                 <Range
@@ -58,13 +59,14 @@ export default function ModalGenerator({ show, data, onHide, onMake } : ModalGen
                     max={ 100 }
                     num={ randoms }
                     onChange={ setRandoms }
+                    disabled={ wait }
                 />
 
             </Modal.Body>
 
             <Modal.Footer>
 
-                <Button variant="secondary" onClick={ onHide } disabled={ wait }>
+                <Button variant="secondary" onClick={ onHide }>
                     Cancelar
                 </Button>
 

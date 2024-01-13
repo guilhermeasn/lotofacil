@@ -1,5 +1,5 @@
 import { useMask } from "mask-hooks";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, Button, FormControl, Modal } from "react-bootstrap";
 import Ticket from "./Ticket";
 
@@ -58,11 +58,11 @@ export default function ModalBet({ show, bet, onHide, onSave } : ModalBetProps) 
                 : actives
     ));
 
-    const save = () : void => {
+    const save = useCallback(() : void => {
         if(actives.length < 15) return;
         onSave(actives.sort((a, b) => a - b));
         onHide();
-    }
+    }, [actives, onHide, onSave]);
 
     return (
 

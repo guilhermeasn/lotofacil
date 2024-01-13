@@ -1,4 +1,5 @@
 import map from "object-as-array/map";
+import { useMemo } from "react";
 import { Card, Col, Row } from "react-bootstrap";
 import { probability, probabilityLevel } from "../helpers/math";
 
@@ -17,13 +18,13 @@ const description : string[] = [
 
 export default function Totalization({ quantity, price } : TotalizationProps) {
 
-    const prob : number = probability(quantity);
+    const prob : number = useMemo(() => probability(quantity), [ quantity ]);
 
-    const data : Record<string, string[]> = {
+    const data : Record<string, string[]> = useMemo(() => ({
         'Quantidade': [ quantity.toLocaleString('pt-br'), quantity === 1 ? 'jogo' : 'jogos' ],
         'Valor total': [ (quantity * price).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }) ],
         'Probabilidade': [ prob > 0 ? '1 em' : '', prob.toLocaleString(), prob > 0 ? '(' + description[probabilityLevel(prob)-1] + ')' : '' ]
-    };
+    }), [ price, prob, quantity ]);
 
     return (
 
