@@ -160,7 +160,7 @@ export default function App() {
             data={ data }
             show={ modal === 'generator' }
             onHide={ () => setModal(null) }
-            onMake={ bets => betAdd(...bets) }
+            onSave={ bets => betAdd(...bets) }
         />
 
     </>;

@@ -9,10 +9,10 @@ export type ModalGeneratorProps = {
     show   : boolean;
     data   : Raffles;
     onHide : () => void;
-    onMake : (bets : number[][]) => void;
+    onSave : (bets : number[][]) => void;
 }
 
-export default function ModalGenerator({ show, data, onHide, onMake } : ModalGeneratorProps) {
+export default function ModalGenerator({ show, data, onHide, onSave } : ModalGeneratorProps) {
 
     const [ balls, setBalls ] = useState<number>(15);
     const [ wait, setWait ] = useState<boolean>(false);
@@ -24,14 +24,14 @@ export default function ModalGenerator({ show, data, onHide, onMake } : ModalGen
 
         trigger('surprises', randoms, balls, 25).then(bets => {
 
-            if(show) onMake(bets);
+            if(show) onSave(bets);
 
             onHide();
             setWait(false);
             
         });
 
-    }, [randoms, balls, show, onMake, onHide]);
+    }, [randoms, balls, show, onSave, onHide]);
 
     return (
 
