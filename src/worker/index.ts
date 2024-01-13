@@ -10,7 +10,12 @@ export type MathFuncTypes<F extends MathFuncs> = MathFunc<F> extends (...args : 
 
 export default function trigger<F extends MathFuncs>(func : F, ...args : MathFuncTypes<F>['args']) : Promise<MathFuncTypes<F>['return']> {
     
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
+
+        if(typeof math[func] !== 'function') {
+            reject(Error('function was not found in math'))
+            return;
+        }
 
         if(!Worker) {
             // @ts-ignore
