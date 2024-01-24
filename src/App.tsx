@@ -24,6 +24,12 @@ export default function App() {
     const load = () => { if(!data) raffles().then(setData).finally(() => setTimeout(() => data || load, 3000)); };
     useEffect(load, [data, load]);
 
+    // test smartBets (mto demorado)
+    // useEffect(() => {
+    //     if(!data) return;
+    //     trigger('smartBets', 18, map(data, r => r), [12], 10).then(console.log);
+    // }, [ data ]);
+
     const [ bets, setBets ] = useState<number[][]>(restore() ?? []);
     useEffect(() => { save(bets); }, [ bets ]);
 

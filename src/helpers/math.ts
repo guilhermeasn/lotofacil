@@ -120,6 +120,33 @@ export function numberOfCombination(sequence : number[]) : number {
 
 }
 
+export function smartBets(amount : number, raffles : number[][], hits : number[], limit : number) : number[][] {
+
+    let score : number = 0;
+    let smartBets : number[][] = [];
+
+    combine(amount, 25, bet => {
+
+        console.log('t', bet);
+
+        const result = matches(bet, raffles);
+        const points = hits.reduce((t, c) => t + ((c in result) ? result[c] : 0), 0);
+
+        if(points > score) {
+            score = points;
+            smartBets = [ bet ]
+        } else if(points === score && smartBets.length < limit) {
+            smartBets.push(bet);
+        }
+
+        return false;
+
+    });
+
+    return smartBets;
+
+}
+
 export function surprise(amount : number = 15, overall : number = 25) : number[] {
 
     if(amount > overall) throw new Error('amount cannot be greater than overall');
